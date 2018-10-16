@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class User {
-	private static Map<String, User> users = new HashMap<String, User>();
-	public static Map<String, User> getUsers(){ return users; }
+	private static Map<String, User> guests = new HashMap<String, User>();
+	private static Map<String, User> hosts = new HashMap<String, User>();
+	
+	public static Map<String, User> getHosts(){ return hosts; }
+	public static Map<String, User> getGuests(){ return guests; }
 	
 	private String id;
 	private String pw;

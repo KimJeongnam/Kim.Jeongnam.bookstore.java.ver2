@@ -9,7 +9,7 @@ import java.sql.Statement;
 public class mysqldb {
 	private Connection con = null;
 	private Statement stmt = null;
-	private static mysqldb db = new mysqldb();
+	private static mysqldb instance = new mysqldb();
 	
 	public mysqldb() {
 		try {
@@ -35,7 +35,7 @@ public class mysqldb {
 		System.out.println("VenderError : "+ e.getErrorCode());
 	}
 	
-	public static mysqldb getDB() { return db; }
+	public static mysqldb getInstance() { return instance; }
 	public Connection getConnection() { return con; }
 	
 	
@@ -48,8 +48,4 @@ public class mysqldb {
 		}
 	}
 	
-	
-	public static void main(String[] args) {
-		mysqldb.getDB();
-	}
 }

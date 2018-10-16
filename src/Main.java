@@ -1,7 +1,7 @@
-import Forms.LoginForm;
+import Forms.MainForm;
 
 public class Main {
 	public static void main(String[] args) {
-		new LoginForm();
+		MainForm.getInstance().setVisible(true);;
 	}
 }
