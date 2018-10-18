@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import Forms.Listener.MainButtonListener;
+import Forms.Listener.Main.MainButtonListener;
 
 public class SignUpPanel extends JPanel{
 

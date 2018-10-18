@@ -1,26 +1,25 @@
 package DB.user_command;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
 import DB.Command;
-import DB.mysqldb;
+import DB.Oracledb;
 import Forms.Panels.LoginPanel;
 import Models.Code;
 import service.Session;
 
 public class Login_Command implements Command{
-	Statement stmt;
+	PreparedStatement pstmt;
 	ResultSet rs;
 	String id = "";
 	String pw = "";
 	String permission = "";
 	
+	@SuppressWarnings("deprecation")
 	public Login_Command(String permission) {
 		this.permission = permission;
 		
@@ -35,23 +34,22 @@ public class Login_Command implements Command{
 			break;
 		}
 	}
-	
+
 	@Override
 	public void execute() throws SQLException{
 		// TODO Auto-generated method stub
 		
-		stmt = mysqldb.getInstance().getStatement();
+		String sql = "SELECT user_pw FROM users WHERE user_id=? AND permission=?";
 		
-		String sql = "SELECT user_pw, PASSWORD('"+pw+"') FROM USERS WHERE user_id='"
-				+id
-				+"' AND permission='"+permission+"'";
+		pstmt = Oracledb.getInstance().getConnection().prepareStatement(sql);
+		pstmt.setString(1, id);
+		pstmt.setString(2, permission);
 
-		rs = stmt.executeQuery(sql);
-
+		rs = pstmt.executeQuery();
+		
 		if (rs.next()) {
 			String user_pw = rs.getString(1);
-			String input_pw = rs.getString(2);
-			if(user_pw.equals(input_pw)) {
+			if(user_pw.equals(pw)) {
 				Session.getInstance().setId(id);
 				Session.getInstance().setStatus(true);
 			}else {
@@ -61,7 +59,7 @@ public class Login_Command implements Command{
 		}else
 			JOptionPane.showMessageDialog(null, "등록되지 않은 id 입니다.", "Login Fail!", JOptionPane.ERROR_MESSAGE);
 		
-		stmt.close();
+		pstmt.close();
 		rs.close();
 	}
 

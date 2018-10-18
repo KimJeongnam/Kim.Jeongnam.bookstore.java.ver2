@@ -1,4 +1,4 @@
-package Forms.Listener;
+package Forms.Listener.Main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 import Forms.MainForm;
 import Models.Code;
-import service.MainImpl;
+import service.Services;
 
 public class MainButtonListener implements ActionListener{
 
@@ -40,14 +40,17 @@ public class MainButtonListener implements ActionListener{
 			signUpbtn.setEnabled(false);
 			MainForm.getInstance().getCardLayout().show(cardPanel, "SignUp");
 			break;
-		case "Sign UP!":
-			MainImpl.getInstance().userAdd();
-			break;
 		case Code.PERMISSION_HOST+" Login":
-			MainImpl.getInstance().HostLogin();
+			/*MainImpl.getInstance().HostLogin();*/
+			Services.getInstance().getMap().get(Code.MAIN_HOST_LOGIN).activation();
 			break;
 		case Code.PERMISSION_GUEST+" Login":
-			MainImpl.getInstance().GuestLogin();
+			/*MainImpl.getInstance().GuestLogin();*/
+			Services.getInstance().getMap().get(Code.MAIN_GUEST_LOGIN).activation();
+			break;
+		case "Sign UP!":
+			/*MainImpl.getInstance().userAdd();*/
+			Services.getInstance().getMap().get(Code.MAIN_USER_ADD).activation();
 			break;
 		}
 	}

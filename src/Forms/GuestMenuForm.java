@@ -15,10 +15,12 @@ public class GuestMenuForm extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private JLabel labelUserId= null;
 
 	public GuestMenuForm() {
 		this.setTitle(MainForm.getInstance().getTitle());
-		this.add(new JLabel(Session.getInstance().getId()+"님 환영합니다."));
+		labelUserId = new JLabel();
+		this.add(labelUserId); //Session.getInstance().getId()+"님 환영합니다."
 		
 		this.setSize(300, 300);
 		this.addWindowListener(new WindowAdapter() {
@@ -32,6 +34,10 @@ public class GuestMenuForm extends JFrame {
 				Session.getInstance().logout(); // 로그아웃 처리
 			}
 		});
+	}
+	
+	public JLabel getLabelUserId() {
+		return labelUserId;
 	}
 
 	public static GuestMenuForm getInstance() {

@@ -96,11 +96,15 @@ ALTER TABLE orders
 ALTER TABLE books
     ADD CONSTRAINT negativenumber_price_CK
     CHECK(price > 0);
+    ADD CONSTRAINT negativenumber_stock_CK
+    CHECK(stock > 0);
 ALTER TABLE orders
 	ADD CONSTRAINT boolean_payment_status_CK
 	CHECK(payment_status IN (0, 1))
 	ADD CONSTRAINT boolean_refundask_CK
 	CHECK(payment_status IN (0, 1))
+	ADD CONSTRAINT negativenumber_orderstock_CK
+    CHECK(order_stock > 0);
 ;
 
 INSERT INTO permissions VALUES('host');
@@ -115,3 +119,6 @@ INSERT INTO books VALUES(8845, 'JAVA', '고슬링', 35000, 500);
 
 DESC orders;
 INSERT INTO orders VALUES(1001, 8845, 'user', 50, 0, 0);
+
+commit;
+

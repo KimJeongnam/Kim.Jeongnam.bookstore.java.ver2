@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import Forms.Listener.MainButtonListener;
+import Forms.Listener.Main.MainButtonListener;
 import Forms.Panels.LoginPanel;
 import Forms.Panels.SignUpPanel;
 import Models.Code;
