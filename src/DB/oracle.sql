@@ -95,7 +95,7 @@ ALTER TABLE orders
 /* add constraint */
 ALTER TABLE books
     ADD CONSTRAINT negativenumber_price_CK
-    CHECK(price > 0);
+    CHECK(price > 0)
     ADD CONSTRAINT negativenumber_stock_CK
     CHECK(stock > 0);
 ALTER TABLE orders
@@ -105,7 +105,6 @@ ALTER TABLE orders
 	CHECK(payment_status IN (0, 1))
 	ADD CONSTRAINT negativenumber_orderstock_CK
     CHECK(order_stock > 0);
-;
 
 INSERT INTO permissions VALUES('host');
 INSERT INTO permissions VALUES('guest');
