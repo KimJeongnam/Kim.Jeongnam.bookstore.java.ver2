@@ -1,4 +1,3 @@
-
 /* Drop Tables */
 
 DROP TABLE carts CASCADE CONSTRAINTS;
@@ -162,3 +161,4 @@ INSERT (c.user_id, c.book_code, c.wish_stock)
 VALUES (s.user_id, s.book_code, 10);  
 
 COMMIT;
+
