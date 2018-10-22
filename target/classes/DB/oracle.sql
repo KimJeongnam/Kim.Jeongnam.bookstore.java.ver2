@@ -1,3 +1,4 @@
+
 /* Drop Tables */
 
 DROP TABLE carts CASCADE CONSTRAINTS;
@@ -150,15 +151,20 @@ VALUES (s.user_id, s.book_code, 10);
 
 
 MERGE INTO carts c
-USING ( SELECT 'user2' user_id, 8845 book_code   -- USING절에 뷰가 올수 있다.
+USING ( SELECT 'user2' user_id, 8845 book_code, 10 wish_stock   -- USING절에 뷰가 올수 있다.
         FROM dual) s
 ON ( c.user_id = s.user_id 
     AND c.book_code = s.book_code)
 WHEN MATCHED THEN
-  UPDATE SET c.wish_stock = c.wish_stock+10
+  UPDATE SET c.wish_stock = c.wish_stock+s.wish_stock
+  WHERE s.wish_stock < (SELECT stock
+                        FROM books
+                        WHERE book_code = s.book_code)
 WHEN NOT MATCHED THEN
-INSERT (c.user_id, c.book_code, c.wish_stock)
-VALUES (s.user_id, s.book_code, 10);  
-
+    INSERT (c.user_id, c.book_code, c.wish_stock)
+    VALUES (s.user_id, s.book_code, s.wish_stock)
+    WHERE s.wish_stock < (SELECT stock
+                            FROM books
+                            WHERE book_code = s.book_code);
+                        
 COMMIT;
-
