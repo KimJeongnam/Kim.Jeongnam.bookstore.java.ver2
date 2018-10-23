@@ -33,7 +33,7 @@ public class HostLogin implements Service{
 		
 		if(Session.getInstance().isStatus()) {
 			JOptionPane.showMessageDialog(null, "관리자님 로그인 되었습니다.", "login success", JOptionPane.INFORMATION_MESSAGE);
-			HostMenuForm.getInstance().setVisible(true);
+			HostMenuForm.getInstance();
 			MainForm.getInstance().setVisible(false);
 			System.out.println("host login success");
 		}

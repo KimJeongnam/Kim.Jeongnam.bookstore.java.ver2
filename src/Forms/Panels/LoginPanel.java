@@ -34,11 +34,29 @@ public class LoginPanel extends JPanel{
 			title = new JLabel("관리자 로그인");
 		}
 		JPanel panel = new JPanel();
+		JPanel insertPanel = insertPanel();
+		
+		panel.setLayout(new BorderLayout());
+		
+		
+		if(permission.equals(Code.PERMISSION_GUEST))
+			btn_login = new JButton(Code.PERMISSION_GUEST+" Login");
+		else
+			btn_login = new JButton(Code.PERMISSION_HOST+" Login");
+		btn_login.addActionListener(new MainButtonListener());
+		
+		panel.add(title, "North");
+		panel.add(insertPanel, "West");
+		panel.add(btn_login, "East");
+		
+		this.add(panel);
+	}
+	
+	private JPanel insertPanel() {
 		JPanel insertPanel = new JPanel();
 		JPanel idPanel = new JPanel();
 		JPanel pwPanel = new JPanel();
 		
-		panel.setLayout(new BorderLayout());
 		insertPanel.setLayout(new BorderLayout());
 		idPanel.setLayout(new FlowLayout());
 		pwPanel.setLayout(new FlowLayout());
@@ -58,19 +76,8 @@ public class LoginPanel extends JPanel{
 		insertPanel.add(idPanel, "North");
 		insertPanel.add(pwPanel, "South");
 		
-		if(permission.equals(Code.PERMISSION_GUEST))
-			btn_login = new JButton(Code.PERMISSION_GUEST+" Login");
-		else
-			btn_login = new JButton(Code.PERMISSION_HOST+" Login");
-		btn_login.addActionListener(new MainButtonListener());
-		
-		panel.add(title, "North");
-		panel.add(insertPanel, "West");
-		panel.add(btn_login, "East");
-		
-		this.add(panel);
+		return insertPanel;
 	}
-	
 	public static LoginPanel getHostInstance() {
 		return hostLoginPanel;
 	}
@@ -78,7 +85,7 @@ public class LoginPanel extends JPanel{
 	public static LoginPanel getGuestInstance() {
 		return guestLoginPanel;
 	}
-	
+
 	public JTextField getTf_id() {
 		return tf_id;
 	}

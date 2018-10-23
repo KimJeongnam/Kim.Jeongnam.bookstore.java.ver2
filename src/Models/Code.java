@@ -26,7 +26,9 @@ public class Code {
 	public static final int HOST_BOOK_DELETE = 303; 	// 책삭제
 	
 	public static final int HOST_ORDER_LIST = 310; 		// 주문 목록
-	public static final int HOST_ORDER_CONFIRM = 311;	// 결제 승인
-	public static final int HOST_ORDER_CANCLE = 312; 	// 결제 취소
+	public static final int HOST_ORDER_CONFIRM = 311;	// 결제 승인 
+	public static final int HOST_ORDER_CANCLE = 312; 	// 결제 취소  
+	public static final int HOST_REFUND_CONFIRM =320;	// 환불요청 승인
+	public static final int HOST_REFUND_CANCLE =320;	// 환불요청 취소
 	public static final int HOST_SALE_TOTAL = 313; 		// 결산
 }

@@ -68,8 +68,6 @@ public class MainForm extends JFrame{
 		this.setResizable(false);
 	}
 	
-	public static MainForm getInstance() { return instance; }
-	
 	public JPanel getCardPanel() {
 		return cardPanel;
 	}
@@ -90,4 +88,5 @@ public class MainForm extends JFrame{
 		return btn_SignUp;
 	}
 	
+	public static MainForm getInstance() { return instance; }
 }
