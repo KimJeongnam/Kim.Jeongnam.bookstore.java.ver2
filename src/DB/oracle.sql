@@ -95,7 +95,7 @@ ALTER TABLE orders
 /* add constraint */
 ALTER TABLE books
     ADD CONSTRAINT negativenumber_price_CK
-    CHECK(price > 0)
+    CHECK(price > 0);
     ADD CONSTRAINT negativenumber_stock_CK
     CHECK(stock > 0);
 ALTER TABLE orders
@@ -105,6 +105,7 @@ ALTER TABLE orders
 	CHECK(payment_status IN (0, 1))
 	ADD CONSTRAINT negativenumber_orderstock_CK
     CHECK(order_stock > 0);
+;
 
 INSERT INTO permissions VALUES('host');
 INSERT INTO permissions VALUES('guest');
@@ -121,3 +122,49 @@ INSERT INTO orders VALUES(1001, 8845, 'user', 50, 0, 0);
 
 commit;
 
+INSERT INTO carts VALUES('user', 8845, 30);
+
+
+SELECT count(*) 
+    FROM carts 
+    WHERE user_id = 'user' 
+    AND book_code=8845;
+    
+/*
+    ON 조건을 만족하면 WHEN MATCHED THEN 실행
+    만족하지 못하면 WHEN NOT MATCHED THEN 실행
+    
+    장바구니에 해당 user_id와 book_code가 이미 있다면 wish_stock에 수량을 더하며
+    없다면 새로 추가하는 query
+*/
+MERGE INTO carts c
+USING ( SELECT 'user' user_id, 8845 book_code   -- USING절에 뷰가 올수 있다.
+        FROM dual) s
+ON ( c.user_id = s.user_id 
+    AND c.book_code = s.book_code)
+WHEN MATCHED THEN
+  UPDATE SET c.wish_stock = c.wish_stock+10
+WHEN NOT MATCHED THEN
+INSERT (c.user_id, c.book_code, c.wish_stock)
+VALUES (s.user_id, s.book_code, 10);            
+-- INSERT 절의 조건절도 지정이 가능하다
+
+
+MERGE INTO carts c
+USING ( SELECT 'user2' user_id, 8845 book_code, 10 wish_stock   -- USING절에 뷰가 올수 있다.
+        FROM dual) s
+ON ( c.user_id = s.user_id 
+    AND c.book_code = s.book_code)
+WHEN MATCHED THEN
+  UPDATE SET c.wish_stock = c.wish_stock+s.wish_stock
+  WHERE s.wish_stock < (SELECT stock
+                        FROM books
+                        WHERE book_code = s.book_code)
+WHEN NOT MATCHED THEN
+    INSERT (c.user_id, c.book_code, c.wish_stock)
+    VALUES (s.user_id, s.book_code, s.wish_stock)
+    WHERE s.wish_stock < (SELECT stock
+                            FROM books
+                            WHERE book_code = s.book_code);
+                        
+COMMIT;
