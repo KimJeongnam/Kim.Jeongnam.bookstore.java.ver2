@@ -2,9 +2,9 @@ package service.main;
 
 import java.sql.SQLException;
 
-import DB.Command;
-import DB.Oracledb;
-import DB.user_command.createUser_Command;
+import db.Oracledb;
+import db.command.Command;
+import db.command.main.createUser_Command;
 import service.Service;
 
 /*

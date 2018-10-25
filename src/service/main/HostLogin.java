@@ -4,13 +4,13 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-import DB.Command;
-import DB.Oracledb;
-import DB.user_command.Login_Command;
-import Forms.HostMenuForm;
-import Forms.MainForm;
-import Forms.Panels.LoginPanel;
-import Models.Code;
+import db.Oracledb;
+import db.command.Command;
+import db.command.main.Login_Command;
+import forms.MainForm;
+import forms.host.HostMenuForm;
+import forms.panels.main.LoginPanel;
+import models.Code;
 import service.Service;
 import service.Session;
 
@@ -33,7 +33,7 @@ public class HostLogin implements Service{
 		
 		if(Session.getInstance().isStatus()) {
 			JOptionPane.showMessageDialog(null, "관리자님 로그인 되었습니다.", "login success", JOptionPane.INFORMATION_MESSAGE);
-			HostMenuForm.getInstance();
+			HostMenuForm.createInstance();
 			MainForm.getInstance().setVisible(false);
 			System.out.println("host login success");
 		}

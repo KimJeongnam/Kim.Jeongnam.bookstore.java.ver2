@@ -3,7 +3,7 @@ package service;
 import java.util.HashMap;
 import java.util.Map;
 
-import Models.Code;
+import models.Code;
 import service.main.GuestLogin;
 import service.main.HostLogin;
 import service.main.UserAdd;

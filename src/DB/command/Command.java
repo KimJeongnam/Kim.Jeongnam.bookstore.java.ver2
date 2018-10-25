@@ -1,4 +1,4 @@
-package DB;
+package db.command;
 
 import java.sql.SQLException;
 

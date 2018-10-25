@@ -1,4 +1,4 @@
-package Forms.Panels;
+package forms.panels.main;
 
 import java.awt.FlowLayout;
 
@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import Forms.Listener.Main.MainButtonListener;
+import forms.listener.main.MainButtonListener;
 
 public class SignUpPanel extends JPanel{
 

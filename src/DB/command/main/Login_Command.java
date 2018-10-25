@@ -1,4 +1,4 @@
-package DB.user_command;
+package db.command.main;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -6,10 +6,10 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-import DB.Command;
-import DB.Oracledb;
-import Forms.Panels.LoginPanel;
-import Models.Code;
+import db.Oracledb;
+import db.command.Command;
+import forms.panels.main.LoginPanel;
+import models.Code;
 import service.Session;
 
 public class Login_Command implements Command{

@@ -14,7 +14,7 @@ DROP TABLE permissions CASCADE CONSTRAINTS;
 
 CREATE TABLE books
 (
-	book_code number(4) NOT NULL,
+	book_code varchar2(5) NOT NULL,
 	book_name varchar2(20) NOT NULL,
 	author varchar2(20) NOT NULL,
 	price number(10) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE books
 CREATE TABLE carts
 (
 	user_id varchar2(20) NOT NULL,
-	book_code number(4) NOT NULL,
+	book_code varchar2(5) NOT NULL,
 	wish_stock number(4) NOT NULL,
 	PRIMARY KEY (user_id, book_code)
 );
@@ -34,13 +34,12 @@ CREATE TABLE carts
 
 CREATE TABLE orders
 (
-	order_code number(4) NOT NULL,
-	book_code number(4) NOT NULL,
 	user_id varchar2(20) NOT NULL,
+	book_code varchar2(5) NOT NULL,
 	order_stock number(4) NOT NULL,
 	payment_status number(1),
-	refundask number(1),
-	PRIMARY KEY (order_code)
+	refund_ask number(1),
+	PRIMARY KEY (user_id, book_code)
 );
 
 
@@ -94,18 +93,19 @@ ALTER TABLE orders
 
 /* add constraint */
 ALTER TABLE books
-    ADD CONSTRAINT negativenumber_price_CK
-    CHECK(price > 0);
-    ADD CONSTRAINT negativenumber_stock_CK
+    ADD CONSTRAINT orders_price_CK
+    CHECK(price > 0)
+    ADD CONSTRAINT orders_stock_CK
     CHECK(stock > 0);
+
 ALTER TABLE orders
-	ADD CONSTRAINT boolean_payment_status_CK
+	ADD CONSTRAINT orders_payment_status_CK
 	CHECK(payment_status IN (0, 1))
-	ADD CONSTRAINT boolean_refundask_CK
-	CHECK(payment_status IN (0, 1))
-	ADD CONSTRAINT negativenumber_orderstock_CK
+	ADD CONSTRAINT orders_refund_ask_CK
+	CHECK(refund_ask IN (0, 1))
+	ADD CONSTRAINT orders_orderstock_CK
     CHECK(order_stock > 0);
-;
+
 
 INSERT INTO permissions VALUES('host');
 INSERT INTO permissions VALUES('guest');
@@ -115,20 +115,20 @@ INSERT INTO users VALUES('host', '1234', 'host');
 INSERT INTO users VALUES('user', '1234', 'guest');
 
 DESC books;
-INSERT INTO books VALUES(8845, 'JAVA', '고슬링', 35000, 500);
+INSERT INTO books VALUES('8c4f9', 'JAVA', '고슬링', 35000, 500);
 
 DESC orders;
-INSERT INTO orders VALUES(1001, 8845, 'user', 50, 0, 0);
+INSERT INTO orders VALUES('user', '8c4f9', 50, 0, 0);
 
 commit;
 
-INSERT INTO carts VALUES('user', 8845, 30);
+INSERT INTO carts VALUES('user', '8c4f9', 30);
 
 
 SELECT count(*) 
     FROM carts 
     WHERE user_id = 'user' 
-    AND book_code=8845;
+    AND book_code='8c4f9';
     
 /*
     ON 조건을 만족하면 WHEN MATCHED THEN 실행
@@ -138,7 +138,7 @@ SELECT count(*)
     없다면 새로 추가하는 query
 */
 MERGE INTO carts c
-USING ( SELECT 'user' user_id, 8845 book_code   -- USING절에 뷰가 올수 있다.
+USING ( SELECT 'user' user_id, '8c4f9' book_code   -- USING절에 뷰가 올수 있다.
         FROM dual) s
 ON ( c.user_id = s.user_id 
     AND c.book_code = s.book_code)
@@ -151,7 +151,7 @@ VALUES (s.user_id, s.book_code, 10);
 
 
 MERGE INTO carts c
-USING ( SELECT 'user2' user_id, 8845 book_code, 10 wish_stock   -- USING절에 뷰가 올수 있다.
+USING ( SELECT 'user' user_id, '8c4f9' book_code, 10 wish_stock   -- USING절에 뷰가 올수 있다.
         FROM dual) s
 ON ( c.user_id = s.user_id 
     AND c.book_code = s.book_code)

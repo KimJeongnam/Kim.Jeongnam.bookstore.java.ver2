@@ -1,4 +1,4 @@
-package DB.user_command;
+package db.command.main;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -6,10 +6,10 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
-import DB.Command;
-import DB.Oracledb;
-import Forms.Panels.SignUpPanel;
-import Models.Code;
+import db.Oracledb;
+import db.command.Command;
+import forms.panels.main.SignUpPanel;
+import models.Code;
 
 public class createUser_Command implements Command{
 	PreparedStatement pstmt;
