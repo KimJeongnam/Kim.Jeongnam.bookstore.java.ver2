@@ -28,6 +28,7 @@ public class HostMenuForm extends JFrame{
 	private static HostMenuForm instance = null;
 	
 	private JPanel panel = null;
+	private BookTablePanel tablepanel = null;
 	
 	public HostMenuForm() {
 		this.setTitle(MainForm.getInstance().getTitle());
@@ -39,7 +40,7 @@ public class HostMenuForm extends JFrame{
 		panel.add(new JLabel("관리자님 환영합니다."));
 		this.add(panel, "North");
 		
-		JPanel tablepanel = createLeftPanel();
+		tablepanel = createLeftPanel();
 		panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
 		panel.add(tablepanel);
@@ -69,8 +70,8 @@ public class HostMenuForm extends JFrame{
 		});
 	}
 	//좌측 테이블 생성
-	private JPanel createLeftPanel() {
-		JPanel panel = new BookTablePanel();
+	private BookTablePanel createLeftPanel() {
+		BookTablePanel panel = new BookTablePanel();
 		return panel;
 	}
 	
@@ -81,7 +82,7 @@ public class HostMenuForm extends JFrame{
 		JButton button = null;
 		
 		panel.setLayout(boxlayout);
-		panel.setBorder(new EmptyBorder(new Insets(50,20,50,20)));
+		panel.setBorder(new EmptyBorder(new Insets(50,100,50,20)));
 		
 		button = new JButton("책 추가");
 		button.addActionListener(new HostMenuButtonLitener());
@@ -126,4 +127,7 @@ public class HostMenuForm extends JFrame{
 		System.gc();	//시스템에 Garbage Collector 요청
 	}
 	
+	public BookTablePanel getTablepanel() {
+		return tablepanel;
+	}
 }

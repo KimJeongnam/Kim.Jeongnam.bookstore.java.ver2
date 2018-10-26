@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import bookstore.exception.MapInValueException;
+import forms.panels.host.InsertBookPanel;
 
 public class Book {
 	private static Map<String, Book> shelfMap = new HashMap<String, Book>();
@@ -37,6 +40,76 @@ public class Book {
 	private String price;
 	private String stock;
 
+	
+	public static Book validation(String setting) {
+		Book book = null;
+		InsertBookPanel insertBookPanel = InsertBookPanel.getInstance();
+		
+		String book_code = insertBookPanel.getLabel_bookCode().getText().trim();
+		String book_name = insertBookPanel.getTf_book_name().getText().trim();
+		String author = insertBookPanel.getTf_author().getText().trim();
+		String price = insertBookPanel.getTf_price().getText().trim();
+		String stock = insertBookPanel.getTf_stock().getText().trim();
+
+		if(setting.equals("add")) {
+			if(book_code.length() != 0) {
+				JOptionPane.showMessageDialog(null, "입력칸을 Clear 하고 진행해주세요.", "Book Code 오류"
+						, JOptionPane.WARNING_MESSAGE);
+				return book;
+			}
+		}else if(setting.equals("update")) {
+			if(book_code.length() == 0) {
+				JOptionPane.showMessageDialog(null, "수정을 원하는 책을 테이블에서 책을 선택 후 진행해주세요!", "Book Code 오류"
+						, JOptionPane.WARNING_MESSAGE);
+				return book;
+			}
+		} else if (setting.equals("delete")) {
+			book = new Book();
+			book.setBook_code(book_code);
+			return book;
+		}
+
+		if (book_name.length() == 0) {
+			JOptionPane.showMessageDialog(null, "책 이름을 입력해주세요!", "공백 오류"
+					, JOptionPane.WARNING_MESSAGE);
+			insertBookPanel.getTf_book_name().requestFocus();
+			return book;
+		} else if (author.length() == 0) {
+			JOptionPane.showMessageDialog(null, "책의 저자를 입력해주세요!", "공백 오류"
+					, JOptionPane.WARNING_MESSAGE);
+			insertBookPanel.getTf_author().requestFocus();
+			return book;
+		} else if (price.length() == 0) {
+			JOptionPane.showMessageDialog(null, "가격을 입력해주세요!", "공백 오류"
+					, JOptionPane.WARNING_MESSAGE);
+			insertBookPanel.getTf_author().requestFocus();
+			return book;
+		} else if (stock.length() == 0) {
+			JOptionPane.showMessageDialog(null, "수량을 입력해주세요!", "공백 오류"
+					, JOptionPane.WARNING_MESSAGE);
+			insertBookPanel.getTf_author().requestFocus();
+			return book;
+		} else {
+			try {
+				Integer.parseInt(price);
+				Integer.parseInt(stock);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "가격 및 수량은 숫자입니다!", "숫자 오류", JOptionPane.WARNING_MESSAGE);
+				insertBookPanel.getTf_author().requestFocus();
+				return book;
+			}
+		}
+		
+		book = new Book();
+		book.setBook_code(book_code);
+		book.setBook_name(book_name);
+		book.setAuthor(author);
+		book.setPrice(price);
+		book.setStock(stock);
+		return book;
+	}
+	
+	
 	public String getBook_code() {
 		return book_code;
 	}
@@ -85,5 +158,7 @@ public class Book {
 				" 가격 :"+getPrice()+
 				" 수량:"+getStock();
 	}
+	
+	
 
 }

@@ -15,8 +15,6 @@ public class BookTableModel extends AbstractTableModel {
 
 	private String[] columnNames = { "Book Code", "제목", "저자", "가격", "수량" };
 	private ArrayList<Book> list;
-
-	public BookTableModel(){}
 	
 	public BookTableModel(ArrayList<Book> list){
 		this.list = list;

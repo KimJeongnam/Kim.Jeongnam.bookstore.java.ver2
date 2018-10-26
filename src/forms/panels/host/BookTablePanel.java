@@ -1,7 +1,8 @@
 package forms.panels.host;
 
 import java.awt.FlowLayout;
-import java.sql.SQLException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -13,11 +14,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import db.Oracledb;
-import db.command.Command;
-import db.command.host.getbooks_Command;
+import forms.host.HostMenuForm;
 import forms.tables.BookTableModel;
 import models.Book;
+import models.Code;
+import service.Services;
 
 public class BookTablePanel extends JPanel{
 
@@ -41,17 +42,37 @@ public class BookTablePanel extends JPanel{
 		
 		tableModel = new BookTableModel(Book.getShelfList());
 		
-		TableColumn column = null;
 		table = new JTable(tableModel);
 		DefaultTableRenderer(table);
-		table.setFillsViewportHeight(false);				// 셀 수정 불가
-		table.getTableHeader().setReorderingAllowed(false);	// 셀 이동불가
+		/*table.setFillsViewportHeight(true);*/				// 셀 수정 불가
+		/*table.getTableHeader().setReorderingAllowed(false);	*/// 셀 이동불가
 		table.getTableHeader().setResizingAllowed(false);	// 셀 크기 조정 불가
-		
-		
+ 
+		table.addMouseListener(new TableClickAdapter(table));
 		JScrollPane scrollPane = new JScrollPane(table);
 		
 		// 4번째 컬럼의 셀 좌우크기를 키우는 함수
+		setTableCell(table);
+		
+		
+		this.add(scrollPane);
+		this.add(InsertBookPanel.createInstance());
+	}
+	
+	// 테이블 컬럼 가운데 정렬 함수
+	private void DefaultTableRenderer(JTable t) {
+		DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer(); // 디폴트테이블셀렌더러를 생성
+		defaultTableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER); // 렌더러의 가로정렬을 CENTER로
+
+		TableColumnModel tableColumnModel = t.getColumnModel(); // 정렬할 테이블의 컬럼모델을 가져옴
+
+		for(int i=0; i<5; i++) 
+			tableColumnModel.getColumn(i).setCellRenderer(defaultTableCellRenderer);
+	}
+	
+	// 4번째 컬럼의 셀 좌우크기를 키우는 함수
+	private void setTableCell(JTable table) {
+		TableColumn column = null;
 		for (int i = 0; i < 5; i++) {
 			column = table.getColumnModel().getColumn(i);
 			if (i == 3) {
@@ -59,39 +80,18 @@ public class BookTablePanel extends JPanel{
 				//column.setPreferredWidth(50);
 			}
 		}
-		
-		
-		this.add(scrollPane);
-		this.add(InsertBookPanel.createInstance());
 	}
 	
-	private void DefaultTableRenderer(JTable t) {
-		DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer(); // 디폴트테이블셀렌더러를 생성
-		defaultTableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER); // 렌더러의 가로정렬을 CENTER로
-
-		TableColumnModel tableColumnModel = t.getColumnModel(); // 정렬할 테이블의 컬럼모델을 가져옴
-
-		tableColumnModel.getColumn(1).setCellRenderer(defaultTableCellRenderer);
-		tableColumnModel.getColumn(2).setCellRenderer(defaultTableCellRenderer);
-		tableColumnModel.getColumn(3).setCellRenderer(defaultTableCellRenderer);
-		tableColumnModel.getColumn(4).setCellRenderer(defaultTableCellRenderer);
+	public void update() {
+		BookTableModel model = new BookTableModel(Book.getShelfList());
+		table.setModel(model);
+		DefaultTableRenderer(table);
+		setTableCell(table);
 	}
 
 	// 테이블에 삽입할 책 리스트를 database에서 읽어오는 함수
 	public void getBooks() {
-		Command command = new getbooks_Command();
-		
-		try {
-			command.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			Oracledb.printSQLError(e);
-		}
-		
-		System.out.println("getBooks()");
-		for(Book book : Book.getShelfList()) {
-			System.out.println(book);
-		}
+		Services.getInstance().getMap().get(Code.HOST_BOOK_LIST).activation();
 	}
 	
 	public BookTableModel getTableModel() {
@@ -110,3 +110,25 @@ public class BookTablePanel extends JPanel{
 		this.table = table;
 	}
 }
+
+
+class TableClickAdapter extends MouseAdapter{
+	JTable table;
+	public TableClickAdapter(JTable table) {
+		this.table = table;
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		int row = table.getSelectedRow();
+		
+		System.out.println(table.getValueAt(row, 0));
+		InsertBookPanel.getInstance().getLabel_bookCode().setText((String) table.getValueAt(row, 0));
+		InsertBookPanel.getInstance().getTf_book_name().setText((String) table.getValueAt(row, 1));
+		InsertBookPanel.getInstance().getTf_author().setText((String) table.getValueAt(row, 2));
+		String price = ((String) table.getValueAt(row, 3)).replace(",", "").replace("￦","").trim();
+		InsertBookPanel.getInstance().getTf_price().setText(price);
+		InsertBookPanel.getInstance().getTf_stock().setText((String) table.getValueAt(row, 4));
+		
+	}
+}
+

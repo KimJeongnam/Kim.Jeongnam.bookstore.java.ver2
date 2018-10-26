@@ -8,7 +8,7 @@ import db.Oracledb;
 import db.command.Command;
 import models.Book;
 
-public class getbooks_Command implements Command{
+public class BookList_Command implements Command{
 	Statement stmt;
 	ResultSet rs;
 
@@ -21,7 +21,9 @@ public class getbooks_Command implements Command{
 				", author" + 
 				", TO_CHAR(price, 'L999,999,999') as price" + 
 				", TO_CHAR(stock) as stock " + 
-				" FROM books";
+				" FROM books"+
+				" WHERE delete_status <> 1"+
+				" ORDER BY book_name ASC";
 		
 		stmt = Oracledb.getInstance().getStatement();
 		

@@ -14,11 +14,12 @@ DROP TABLE permissions CASCADE CONSTRAINTS;
 
 CREATE TABLE books
 (
-	book_code varchar2(5) NOT NULL,
+	book_code varchar2(50) NOT NULL,
 	book_name varchar2(20) NOT NULL,
 	author varchar2(20) NOT NULL,
 	price number(10) NOT NULL,
     stock number(4) NOT NULL,
+    delete_status number(1) NOT NULL,
 	PRIMARY KEY (book_code)
 );
 
@@ -26,7 +27,7 @@ CREATE TABLE books
 CREATE TABLE carts
 (
 	user_id varchar2(20) NOT NULL,
-	book_code varchar2(5) NOT NULL,
+	book_code varchar2(50) NOT NULL,
 	wish_stock number(4) NOT NULL,
 	PRIMARY KEY (user_id, book_code)
 );
@@ -35,7 +36,7 @@ CREATE TABLE carts
 CREATE TABLE orders
 (
 	user_id varchar2(20) NOT NULL,
-	book_code varchar2(5) NOT NULL,
+	book_code varchar2(50) NOT NULL,
 	order_stock number(4) NOT NULL,
 	payment_status number(1),
 	refund_ask number(1),
@@ -65,45 +66,52 @@ CREATE TABLE users
 ALTER TABLE carts
 	ADD FOREIGN KEY (book_code)
 	REFERENCES books (book_code)
+	ON DELETE CASCADE
 ;
 
 
 ALTER TABLE orders
 	ADD FOREIGN KEY (book_code)
 	REFERENCES books (book_code)
+	ON DELETE CASCADE
 ;
 
 
 ALTER TABLE users
 	ADD FOREIGN KEY (permission)
 	REFERENCES permissions (permission)
+	ON DELETE CASCADE
 ;
 
 
 ALTER TABLE carts
 	ADD FOREIGN KEY (user_id)
 	REFERENCES users (user_id)
+	ON DELETE CASCADE
 ;
 
 
 ALTER TABLE orders
 	ADD FOREIGN KEY (user_id)
 	REFERENCES users (user_id)
+	ON DELETE CASCADE
 ;
 
 /* add constraint */
 ALTER TABLE books
-    ADD CONSTRAINT orders_price_CK
+    ADD CONSTRAINT books_price_ck
     CHECK(price > 0)
-    ADD CONSTRAINT orders_stock_CK
-    CHECK(stock > 0);
+    ADD CONSTRAINT books_stock_ck
+    CHECK(stock >= 0)
+    ADD CONSTRAINT books_delete_status_ck
+    CHECK(delete_status IN(0, 1));
 
 ALTER TABLE orders
-	ADD CONSTRAINT orders_payment_status_CK
+	ADD CONSTRAINT orders_payment_status_ck
 	CHECK(payment_status IN (0, 1))
-	ADD CONSTRAINT orders_refund_ask_CK
+	ADD CONSTRAINT orders_refund_ask_ck
 	CHECK(refund_ask IN (0, 1))
-	ADD CONSTRAINT orders_orderstock_CK
+	ADD CONSTRAINT orders_orderstock_ck
     CHECK(order_stock > 0);
 
 
@@ -115,7 +123,7 @@ INSERT INTO users VALUES('host', '1234', 'host');
 INSERT INTO users VALUES('user', '1234', 'guest');
 
 DESC books;
-INSERT INTO books VALUES('8c4f9', 'JAVA', '고슬링', 35000, 500);
+INSERT INTO books VALUES('8c4f9', INITCAP('JAVA'), '고슬링', 35000, 500, 0);
 
 DESC orders;
 INSERT INTO orders VALUES('user', '8c4f9', 50, 0, 0);

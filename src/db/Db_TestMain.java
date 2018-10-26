@@ -1,14 +1,10 @@
 package db;
 
-import java.sql.SQLException;
-
-import db.command.Command;
-import db.command.host.getbooks_Command;
-import models.Book;
+import models.CreateCode;
 
 public class Db_TestMain {
 	public static void main(String[] args) {
-		Command command = new getbooks_Command();
+		/*Command command = new getbooks_Command();
 		
 		try {
 			command.execute();
@@ -19,6 +15,8 @@ public class Db_TestMain {
 		
 		for(Book book : Book.getShelfList()) {
 			System.out.println(book);
-		}
+		}*/
+		
+		System.out.println(CreateCode.run());
 	}
 }

@@ -35,6 +35,7 @@ public class InsertBookPanel extends JPanel{
 		return "[Package:forms.panels.host  Class:InsertBookPanel]";
 	}
 
+	private JLabel label_bookCode = null;
 	private JTextField tf_book_name = null;
 	private JTextField tf_author = null;
 	private JTextField tf_price = null;
@@ -56,6 +57,15 @@ public class InsertBookPanel extends JPanel{
 		
 		JPanel panel = null;
 		JLabel label = null;
+		
+		// 책 코드 label
+		panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 15));
+		label = new JLabel("Book Code : ");
+		label_bookCode = new JLabel();
+		panel.add(label);
+		panel.add(label_bookCode);
+		tfPanel.add(panel);		
+		
 		// 책제목
 		panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 15));	// 왼쪽정렬  상하 좌우 간격 15
 		label = new JLabel("책 제목 : ");									// 라벨 생성
@@ -103,6 +113,7 @@ public class InsertBookPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				label_bookCode.setText("");
 				tf_book_name.setText("");
 				tf_author.setText("");
 				tf_price.setText("");
@@ -110,6 +121,10 @@ public class InsertBookPanel extends JPanel{
 			}
 			
 		});
+	}
+	
+	public JLabel getLabel_bookCode() {
+		return label_bookCode;
 	}
 	
 	public JTextField getTf_book_name() {
