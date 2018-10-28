@@ -1,5 +1,6 @@
 package forms.panels.host;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -29,10 +30,12 @@ public class BookTablePanel extends JPanel{
 
 	private BookTableModel tableModel= null;
 	private JTable table = null;
+	private String book_code = null;
+	private String book_name = null;
+	private String price = null;
 	
-	public BookTablePanel() {
+	public BookTablePanel(String permission) {
 		getBooks();
-		
 		this.setLayout(new FlowLayout(FlowLayout.CENTER,10,10));
 		
 		this.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder(), 
@@ -48,15 +51,23 @@ public class BookTablePanel extends JPanel{
 		/*table.getTableHeader().setReorderingAllowed(false);	*/// 셀 이동불가
 		table.getTableHeader().setResizingAllowed(false);	// 셀 크기 조정 불가
  
-		table.addMouseListener(new TableClickAdapter(table));
-		JScrollPane scrollPane = new JScrollPane(table);
+		JScrollPane scrollPane;
 		
 		// 4번째 컬럼의 셀 좌우크기를 키우는 함수
 		setTableCell(table);
 		
-		
-		this.add(scrollPane);
-		this.add(InsertBookPanel.createInstance());
+		if (permission.equals(Code.PERMISSION_HOST)) {
+			table.addMouseListener(new TableClickAdapter(table));
+			
+			scrollPane = new JScrollPane(table);
+			this.add(scrollPane);
+
+			this.setPreferredSize(new Dimension(800, 500));			// 패널 크기 지정
+			this.add(InsertBookPanel.createInstance());				// 책정보 입력 패널
+		}else if(permission.equals(Code.PERMISSION_GUEST)) {
+			scrollPane = new JScrollPane(table);
+			this.add(scrollPane);
+		}
 	}
 	
 	// 테이블 컬럼 가운데 정렬 함수
@@ -82,7 +93,9 @@ public class BookTablePanel extends JPanel{
 		}
 	}
 	
+	// 책정보 내용변경 업데이트
 	public void update() {
+		getBooks();
 		BookTableModel model = new BookTableModel(Book.getShelfList());
 		table.setModel(model);
 		DefaultTableRenderer(table);
@@ -106,9 +119,6 @@ public class BookTablePanel extends JPanel{
 		return table;
 	}
 
-	public void setTable(JTable table) {
-		this.table = table;
-	}
 }
 
 

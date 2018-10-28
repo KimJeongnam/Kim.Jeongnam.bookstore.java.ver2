@@ -5,6 +5,10 @@ public class Code {
 	public static final String PERMISSION_GUEST = "guest";
 	
 	// MAIN
+	public static final int MAIN_GUST_LOGIN_VIEW = 50;  // 카드뷰 핸들러
+	public static final int MAIN_HOST_LOGIN_VIEW = 51;
+	public static final int MAIN_USER_ADD_VIEW = 52;
+	
 	public static final int MAIN_HOST_LOGIN = 110;		// 호스트 로그인
 	public static final int MAIN_GUEST_LOGIN = 111;		// 고객 로그인 
     public static final int MAIN_USER_ADD= 120; 		// 유저 추가

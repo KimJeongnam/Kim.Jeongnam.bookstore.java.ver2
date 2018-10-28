@@ -18,6 +18,7 @@ import forms.MainForm;
 import forms.listener.host.HostMenuButtonLitener;
 import forms.panels.host.BookTablePanel;
 import forms.panels.host.InsertBookPanel;
+import models.Code;
 import service.Session;
 
 public class HostMenuForm extends JFrame{
@@ -26,6 +27,18 @@ public class HostMenuForm extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	private static HostMenuForm instance = null;
+	
+	public static synchronized HostMenuForm createInstance() {
+		if(instance == null) {
+			instance = new HostMenuForm();
+		}
+		return  instance;
+	}
+	
+	public static synchronized HostMenuForm getInstance() throws NullPointerException{
+		return instance;
+	}
+	
 	
 	private JPanel panel = null;
 	private BookTablePanel tablepanel = null;
@@ -71,7 +84,7 @@ public class HostMenuForm extends JFrame{
 	}
 	//좌측 테이블 생성
 	private BookTablePanel createLeftPanel() {
-		BookTablePanel panel = new BookTablePanel();
+		BookTablePanel panel = new BookTablePanel(Code.PERMISSION_HOST);
 		return panel;
 	}
 	
@@ -108,17 +121,6 @@ public class HostMenuForm extends JFrame{
 		panel.add(button);
 		
 		return panel;
-	}
-	
-	public static synchronized HostMenuForm createInstance() {
-		if(instance == null) {
-			instance = new HostMenuForm();
-		}
-		return  instance;
-	}
-	
-	public static synchronized HostMenuForm getInstance() throws NullPointerException{
-		return instance;
 	}
 	
 	public void close() {

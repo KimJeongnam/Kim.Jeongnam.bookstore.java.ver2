@@ -10,37 +10,12 @@ import bookstore.exception.MapInValueException;
 import forms.panels.host.InsertBookPanel;
 
 public class Book {
-	private static Map<String, Book> shelfMap = new HashMap<String, Book>();
 	private static ArrayList<Book> shelfList = new ArrayList<Book>();
-
-	public static void setShelf(Map<String, Book> shelfMap) {
-		Book.shelfMap = shelfMap;
-	}
-
-	public static Map<String, Book> getShelfMap() {
-		return shelfMap;
-	}
 	
 	public static ArrayList<Book> getShelfList(){
 		return shelfList;
 	}
 
-	public static void initShelf(ArrayList<Book> books) throws MapInValueException {
-		for (Book book : books) {
-			if (shelfMap.containsKey(book.getBook_code())) {
-				throw new MapInValueException("shelf", book, "[Error] initShelf()");
-			}
-			shelfMap.put(book.getBook_code(), book);
-		}
-	}
-
-	private String book_code;
-	private String book_name;
-	private String author;
-	private String price;
-	private String stock;
-
-	
 	public static Book validation(String setting) {
 		Book book = null;
 		InsertBookPanel insertBookPanel = InsertBookPanel.getInstance();
@@ -108,6 +83,14 @@ public class Book {
 		book.setStock(stock);
 		return book;
 	}
+	
+
+	private String book_code;
+	private String book_name;
+	private String author;
+	private String price;
+	private String stock;
+
 	
 	
 	public String getBook_code() {

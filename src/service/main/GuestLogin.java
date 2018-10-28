@@ -36,10 +36,8 @@ public class GuestLogin implements Service{
 			JOptionPane.showMessageDialog(null, Session.getInstance().getId()+
 					"님 로그인 되었습니다.", "login success", JOptionPane.INFORMATION_MESSAGE);
 			
-			GuestMenuForm.getInstance().getLabelUserId().setText(
-					"User Id : "+ Session.getInstance().getId());
+			GuestMenuForm.createInstance(Session.getInstance().getId());
 			
-			GuestMenuForm.getInstance().setVisible(true);
 			MainForm.getInstance().setVisible(false);
 			System.out.println(Session.getInstance().getId()+" login success");
 		}

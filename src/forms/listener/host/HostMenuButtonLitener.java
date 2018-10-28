@@ -17,7 +17,6 @@ public class HostMenuButtonLitener implements ActionListener{
 		switch(command) {
 		case "책 추가":
 			Services.getInstance().getMap().get(Code.HOST_BOOK_ADD).activation();
-			Services.getInstance().getMap().get(Code.HOST_BOOK_LIST).activation();
 			try {
 				HostMenuForm.getInstance().getTablepanel().update();
 			}catch(NullPointerException e2) {
@@ -28,7 +27,6 @@ public class HostMenuButtonLitener implements ActionListener{
 			
 		case "책 수정":
 			Services.getInstance().getMap().get(Code.HOST_BOOK_UPDATE).activation();
-			Services.getInstance().getMap().get(Code.HOST_BOOK_LIST).activation();
 			try {
 				HostMenuForm.getInstance().getTablepanel().update();
 			}catch(NullPointerException e2) {
@@ -38,7 +36,6 @@ public class HostMenuButtonLitener implements ActionListener{
 			break;
 		case "책 삭제":
 			Services.getInstance().getMap().get(Code.HOST_BOOK_DELETE).activation();
-			Services.getInstance().getMap().get(Code.HOST_BOOK_LIST).activation();
 			try {
 				HostMenuForm.getInstance().getTablepanel().update();
 			}catch(NullPointerException e2) {

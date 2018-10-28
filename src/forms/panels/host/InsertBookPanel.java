@@ -1,5 +1,6 @@
 package forms.panels.host;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -104,6 +105,7 @@ public class InsertBookPanel extends JPanel{
 		panel.add(button);
 		tfPanel.add(panel);
 		
+		tfPanel.setPreferredSize(new Dimension(300,400));
 		return tfPanel;
 	}
 	
