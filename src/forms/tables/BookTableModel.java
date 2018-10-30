@@ -56,4 +56,8 @@ public class BookTableModel extends AbstractTableModel {
 			return null;
 		}
 	}
+	
+	public Object getRowClass(int row) {
+		return list.get(row);
+	}
 }

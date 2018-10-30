@@ -45,8 +45,8 @@ public class BookUpdate_Command implements Command{
 		rowsInserted = pstmt.executeUpdate();
 		
 		if(rowsInserted==0)
-			JOptionPane.showMessageDialog(null, "Book Code Error 테이블에서 수정할 책을 선택 후 진행하세요!"
-					, "Book Update Fail!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "테이블에서 수정할 책을 선택 후 진행하세요!"
+					, "Book Update Fail!", JOptionPane.WARNING_MESSAGE);
 		else
 			JOptionPane.showMessageDialog(null, "책 수정 완료", "Insert Success"
 					, JOptionPane.INFORMATION_MESSAGE);

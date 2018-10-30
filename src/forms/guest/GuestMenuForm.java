@@ -6,7 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -14,21 +13,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
 
 import forms.MainForm;
+import forms.listener.guest.GuestMenuListener;
+import forms.panels.guest.CarTotalCountPricePanel;
+import forms.panels.guest.CartAddNowBuyPanel;
+import forms.panels.guest.GuestMenuButtonPanel;
 import forms.panels.host.BookTablePanel;
 import models.Code;
 import service.Session;
 
 public class GuestMenuForm extends JFrame {
 
-	private static GuestMenuForm instance = null;
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	
+	private static GuestMenuForm instance = null;
 	public static synchronized GuestMenuForm createInstance(String userid) {
 		if(instance == null) {
 			instance = new GuestMenuForm(userid);
@@ -41,13 +39,7 @@ public class GuestMenuForm extends JFrame {
 	}
 	
 	private String userid;
-	private JLabel cartCount = null;	// 장바구니 건수 
-	private JLabel cartTotal = null;	// 총액
-	private JLabel selectBook_code = null;
-	private JLabel selectBook_name = null;
-	private JTextField tfWishStock = null;
-	
-	private JPanel bookTablePanel = null;
+	private BookTablePanel bookTablePanel = null;
 
 	public GuestMenuForm(String userid) {
 		this.userid = userid;
@@ -65,11 +57,18 @@ public class GuestMenuForm extends JFrame {
 		this.add(panel, "West");
 		
 		panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 15));
-		panel.add(cartAddPanel());
+		JPanel rightPanel = new JPanel();
+		BoxLayout boxlayout = new BoxLayout(rightPanel, BoxLayout.Y_AXIS);
+		rightPanel.setLayout(boxlayout);
+		rightPanel.add(new CartAddNowBuyPanel());
+		rightPanel.add(new GuestMenuButtonPanel());
+		panel.add(rightPanel);
 		this.add(panel, "East");
 
+		
 		this.pack();
 		this.setVisible(true);
+		this.setResizable(false);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -91,100 +90,22 @@ public class GuestMenuForm extends JFrame {
 		labelPanel.add(labal);
 		outPanel.add(labelPanel, "West");
 		JPanel cartCountPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
-		cartCountPanel.add(cartCountPanel());
+		cartCountPanel.add(new CarTotalCountPricePanel());
 		outPanel.add(cartCountPanel, "East");
 		
 		return outPanel;
 	}
 	
-	// 장바구니 패널
-	private JPanel cartCountPanel() {
-		JPanel panel = new JPanel();
-		JLabel label = null;
-		BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
-		panel.setLayout(boxlayout);
-		
-		JPanel boxPanel = new JPanel();
-		boxPanel.setPreferredSize(new Dimension(100,50));	//패널의 크기조정
-
-		boxPanel.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder(), 
-                "장바구니", 
-                TitledBorder.CENTER, 
-                TitledBorder.TOP)); 
-		cartCount = new JLabel("0");
-		label = new JLabel("건");
-		boxPanel.add(cartCount);
-		boxPanel.add(label);
-		
-		panel.add(boxPanel);
-		label = new JLabel("총액 : ");
-		cartTotal = new JLabel("0");
-		JPanel totalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		totalPanel.add(label);
-		totalPanel.add(cartTotal);
-		
-		panel.add(totalPanel);
-		
-		return panel;
-	}
-	// 장바구니 추가
-	private JPanel cartAddPanel() {
-		JLabel label = null;
-		JPanel cartAddPanel = new JPanel(new BorderLayout());
-		cartAddPanel.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder(), 
-                "장바구니 추가 / 바로 구매", 
-                TitledBorder.CENTER, 
-                TitledBorder.TOP)); 
-		
-		JPanel selectShowPanel = new JPanel();
-		BoxLayout boxlayout = new BoxLayout(selectShowPanel, BoxLayout.Y_AXIS);
-		selectShowPanel.setLayout(boxlayout);
-		
-		
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-		label = new JLabel("책 코드 : ");
-		selectBook_code = new JLabel("");
-		panel.add(label);
-		panel.add(selectBook_code);
-		selectShowPanel.add(panel);
-		
-		panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-		label = new JLabel("책 제목 : ");
-		selectBook_name = new JLabel();
-		panel.add(label);
-		panel.add(selectBook_name);
-		selectShowPanel.add(panel);
-		
-		cartAddPanel.add(selectShowPanel, "North");
-		
-		JPanel insertPanel = new JPanel();
-		label = new JLabel("수량 : ");
-		tfWishStock = new JTextField(5);
-		JButton btnCratAdd = new JButton("장바구니에 추가");
-		JButton btnNowBuy = new JButton("바로 구매");
-		insertPanel.add(label);
-		insertPanel.add(tfWishStock);
-		insertPanel.add(Box.createVerticalStrut(10));
-		insertPanel.add(btnCratAdd);
-		insertPanel.add(btnNowBuy);
-		
-		cartAddPanel.add(insertPanel, "South");
-		
-		return cartAddPanel;
-	}
-	
 	public void close() {
 		this.dispose();
+		if(GuestCartForm.getInstance() != null)
+			GuestCartForm.getInstance().close();
 		instance = null;
 		System.gc();
 	}
 
-	public JLabel getCartCount() {
-		return cartCount;
-	}
-
-	public JLabel getCartTotal() {
-		return cartTotal;
+	public BookTablePanel getBookTablePanel() {
+		return bookTablePanel;
 	}
 
 }

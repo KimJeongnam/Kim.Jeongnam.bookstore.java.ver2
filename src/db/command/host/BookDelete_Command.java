@@ -32,8 +32,8 @@ public class BookDelete_Command implements Command{
 		rowsInserted = pstmt.executeUpdate();
 		
 		if(rowsInserted==0)
-			JOptionPane.showMessageDialog(null, "Book Code Error 테이블에서 수정할 책을 선택 후 진행하세요!"
-					, "Book Delete Fail!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "수정을 원하는 책을 테이블에서 책을 선택 후 진행해주세요!", "Book Code 오류"
+					, JOptionPane.WARNING_MESSAGE);
 		else
 			JOptionPane.showMessageDialog(null, "책 삭제 완료", "Delete Success"
 					, JOptionPane.INFORMATION_MESSAGE);

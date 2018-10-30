@@ -1,5 +1,6 @@
 package db;
 
+import bookstore.exception.PriceStockException;
 import models.CreateCode;
 
 public class Db_TestMain {
@@ -18,5 +19,11 @@ public class Db_TestMain {
 		}*/
 		
 		System.out.println(CreateCode.run());
+		
+		String num = "-101";
+		
+		int n = PriceStockException.validation(num);
+		
+		System.out.println(n);
 	}
 }

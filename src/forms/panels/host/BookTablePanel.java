@@ -11,17 +11,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import forms.host.HostMenuForm;
+import forms.guest.GuestMenuForm;
+import forms.panels.guest.CartAddNowBuyPanel;
+import forms.panels.main.MyTablePanel;
 import forms.tables.BookTableModel;
 import models.Book;
 import models.Code;
 import service.Services;
 
-public class BookTablePanel extends JPanel{
+public class BookTablePanel extends MyTablePanel{
 
 	/**
 	 * 
@@ -30,76 +33,55 @@ public class BookTablePanel extends JPanel{
 
 	private BookTableModel tableModel= null;
 	private JTable table = null;
-	private String book_code = null;
-	private String book_name = null;
-	private String price = null;
 	
 	public BookTablePanel(String permission) {
 		getBooks();
-		this.setLayout(new FlowLayout(FlowLayout.CENTER,10,10));
+		this.setLayout(new FlowLayout(FlowLayout.LEFT,10,10));
 		
 		this.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder(), 
-                "책 목록", 
+                "책 목록",
                 TitledBorder.CENTER, 
                 TitledBorder.TOP)); 
 		
 		tableModel = new BookTableModel(Book.getShelfList());
 		
 		table = new JTable(tableModel);
+		table.getTableHeader().setReorderingAllowed(false);
 		DefaultTableRenderer(table);
-		/*table.setFillsViewportHeight(true);*/				// 셀 수정 불가
-		/*table.getTableHeader().setReorderingAllowed(false);	*/// 셀 이동불가
 		table.getTableHeader().setResizingAllowed(false);	// 셀 크기 조정 불가
  
 		JScrollPane scrollPane;
 		
-		// 4번째 컬럼의 셀 좌우크기를 키우는 함수
-		setTableCell(table);
+		// 원하는 칼럼의 셀 좌우크기를 키우는 함수
+		setTableCell(table, 200, 0, 3);
+		setTableCell(table, 130, 1,2,4);
 		
 		if (permission.equals(Code.PERMISSION_HOST)) {
-			table.addMouseListener(new TableClickAdapter(table));
+			table.addMouseListener(new HostClickAdapter(table));
 			
 			scrollPane = new JScrollPane(table);
+			scrollPane.setPreferredSize(new Dimension(650, 500));
 			this.add(scrollPane);
 
-			this.setPreferredSize(new Dimension(800, 500));			// 패널 크기 지정
+			this.setPreferredSize(new Dimension(1000, 600));			// 패널 크기 지정
 			this.add(InsertBookPanel.createInstance());				// 책정보 입력 패널
 		}else if(permission.equals(Code.PERMISSION_GUEST)) {
+			table.addMouseListener(new GuestClickAdapter(table));
 			scrollPane = new JScrollPane(table);
+			scrollPane.setPreferredSize(new Dimension(650, 500));
 			this.add(scrollPane);
 		}
 	}
-	
-	// 테이블 컬럼 가운데 정렬 함수
-	private void DefaultTableRenderer(JTable t) {
-		DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer(); // 디폴트테이블셀렌더러를 생성
-		defaultTableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER); // 렌더러의 가로정렬을 CENTER로
 
-		TableColumnModel tableColumnModel = t.getColumnModel(); // 정렬할 테이블의 컬럼모델을 가져옴
-
-		for(int i=0; i<5; i++) 
-			tableColumnModel.getColumn(i).setCellRenderer(defaultTableCellRenderer);
-	}
-	
-	// 4번째 컬럼의 셀 좌우크기를 키우는 함수
-	private void setTableCell(JTable table) {
-		TableColumn column = null;
-		for (int i = 0; i < 5; i++) {
-			column = table.getColumnModel().getColumn(i);
-			if (i == 3) {
-				column.setPreferredWidth(100); // third column is bigger } else {
-				//column.setPreferredWidth(50);
-			}
-		}
-	}
 	
 	// 책정보 내용변경 업데이트
 	public void update() {
 		getBooks();
-		BookTableModel model = new BookTableModel(Book.getShelfList());
+		AbstractTableModel model = new BookTableModel(Book.getShelfList());
 		table.setModel(model);
 		DefaultTableRenderer(table);
-		setTableCell(table);
+		setTableCell(table, 200, 0, 3);
+		setTableCell(table, 130, 1,2,4);
 	}
 
 	// 테이블에 삽입할 책 리스트를 database에서 읽어오는 함수
@@ -120,11 +102,23 @@ public class BookTablePanel extends JPanel{
 	}
 
 }
-
-
-class TableClickAdapter extends MouseAdapter{
+class GuestClickAdapter extends MouseAdapter{
 	JTable table;
-	public TableClickAdapter(JTable table) {
+	public GuestClickAdapter(JTable table) {
+		this.table = table;
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		int row = table.getSelectedRow();
+		
+		CartAddNowBuyPanel.setSelectBook_code((String)table.getValueAt(row, 0));
+		CartAddNowBuyPanel.setSelectBook_name((String)table.getValueAt(row, 1));
+	}
+}
+
+class HostClickAdapter extends MouseAdapter{
+	JTable table;
+	public HostClickAdapter(JTable table) {
 		this.table = table;
 	}
 	@Override

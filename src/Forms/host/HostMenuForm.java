@@ -95,7 +95,7 @@ public class HostMenuForm extends JFrame{
 		JButton button = null;
 		
 		panel.setLayout(boxlayout);
-		panel.setBorder(new EmptyBorder(new Insets(50,100,50,20)));
+		panel.setBorder(new EmptyBorder(new Insets(50,20,50,20)));
 		
 		button = new JButton("책 추가");
 		button.addActionListener(new HostMenuButtonLitener());
