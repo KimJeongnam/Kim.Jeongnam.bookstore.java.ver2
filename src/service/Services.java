@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import models.Code;
+import service.guest.BuyAskList;
 import service.guest.CartAdd;
 import service.guest.CartAllDelete;
+import service.guest.CartBuy;
 import service.guest.CartDelete;
 import service.guest.CartList;
 import service.guest.CartUpdate;
+import service.guest.NowBuy;
 import service.main.GuestLogin;
 import service.main.HostLogin;
 import service.main.UserAdd;
@@ -39,13 +42,18 @@ public class Services {
 		map.put(Code.HOST_BOOK_UPDATE, new BookUpdate());
 		map.put(Code.HOST_BOOK_DELETE, new BookDelete());
 		
-		// guest service
+		// guest cart service
 		map.put(Code.GUEST_CART_COUNT_TOTAL, new GetCartCount_TotalPrice());
 		map.put(Code.GUEST_CART_LIST, new CartList());
 		map.put(Code.GUEST_CART_ADD, new CartAdd());
 		map.put(Code.GUEST_CART_UPDATE, new CartUpdate());
 		map.put(Code.GUEST_CART_DEL, new CartDelete());
 		map.put(Code.GUEST_CART_ALLDEL, new CartAllDelete());
+		map.put(Code.GUEST_CART_BUY, new CartBuy());
+		map.put(Code.GUEST_NOW_BUY, new NowBuy());
+		
+		// guest refund & buyAsk
+		map.put(Code.GUEST_BUY_ASK_LIST, new BuyAskList());
 		
 	}
 	

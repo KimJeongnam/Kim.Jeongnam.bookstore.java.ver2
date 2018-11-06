@@ -19,6 +19,8 @@ public class Cart {
 	private String wish_stock;
 	private String allPrice;
 
+	public Cart() {}
+	
 	public Cart(String book_code, String book_name, String author, String price, String wish_stock ,String allPrice) {
 		this.book_code = book_code;
 		this.book_name = book_name;

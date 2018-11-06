@@ -132,7 +132,6 @@ class HostClickAdapter extends MouseAdapter{
 		String price = ((String) table.getValueAt(row, 3)).replace(",", "").replace("￦","").trim();
 		InsertBookPanel.getInstance().getTf_price().setText(price);
 		InsertBookPanel.getInstance().getTf_stock().setText((String) table.getValueAt(row, 4));
-		
 	}
 }
 

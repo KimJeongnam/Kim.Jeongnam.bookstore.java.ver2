@@ -30,7 +30,7 @@ public class BookAdd_Command implements Command {
 		int rowsInserted = 0;
 
 		while (rowsInserted == 0) {
-			String book_code = CreateCode.run();
+			String book_code = CreateCode.bookCode();
 
 			String sql = "INSERT INTO books(book_code, book_name, author, price, stock, delete_status)" + 
 					"    VALUES(?, INITCAP(?), ?, ?, ?, 0)";

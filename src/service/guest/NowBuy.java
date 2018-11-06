@@ -1,50 +1,45 @@
 package service.guest;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import bookstore.exception.PriceStockException;
 import db.Oracledb;
 import db.command.Command;
-import db.command.guest.CartAdd_Command;
-import forms.guest.GuestMenuForm;
-import forms.panels.guest.CarTotalCountPricePanel;
+import db.command.guest.NowBuy_Command;
 import forms.panels.guest.CartAddNowBuyPanel;
+import models.Cart;
 import service.Service;
 import service.Session;
 
-public class CartAdd implements Service{
-	Command command;
+public class NowBuy implements Service{
+	
 	@Override
 	public void activation() {
-		// TODO Auto-generated method stub
 		String id = Session.getInstance().getId();
 		String book_code = CartAddNowBuyPanel.getSelectBook_code().trim();
 		String strStock = CartAddNowBuyPanel.getTfWishStock().trim();
 		
-		if(book_code.length() == 0) {
-			JOptionPane.showMessageDialog(null, "책목록에서 책을 선택후 진행해주세요!"
-					, "Book Code Error", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
+		Cart cart = new Cart();
+		cart.setBook_code(book_code);
+		cart.setWish_stock(strStock);
+		ArrayList<Cart> data = new ArrayList<Cart>();
+		data.add(cart);
 		
-		int wish_stock = PriceStockException.validation(strStock);
-		
-		if(wish_stock == -1)
-			return;
-		
-		command = new CartAdd_Command(id, book_code, wish_stock);
+		Command command = new NowBuy_Command(id, data);
 		
 		try {
 			command.execute();
 			CartAddNowBuyPanel.setTfWishStock("");
 			CartAddNowBuyPanel.setSelectBook_code("");
 			CartAddNowBuyPanel.setSelectBook_name("");
-			CarTotalCountPricePanel.update();
 		}catch(SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage()
+					, "구매 요청 실패", JOptionPane.ERROR_MESSAGE);
 			Oracledb.printSQLError(e);
 		}
+		
 	}
-
+	
 }

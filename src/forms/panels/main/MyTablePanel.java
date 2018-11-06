@@ -23,11 +23,11 @@ public class MyTablePanel extends JPanel{
 
 			TableColumnModel tableColumnModel = t.getColumnModel(); // 정렬할 테이블의 컬럼모델을 가져옴
 
-			for(int i=0; i<5; i++) 
+			for(int i=0; i<t.getColumnCount(); i++) 
 				tableColumnModel.getColumn(i).setCellRenderer(defaultTableCellRenderer);
 		}
 		
-		// 4번째 컬럼의 셀 좌우크기를 키우는 함수
+		// 원하는 컬럼 의 사이즈를 변경하는 함수 (변경할 테이블, 사이즈, 변경할 컬럼값...)
 		protected void setTableCell(JTable table, int size, int ...cols) {
 			TableColumn column = null;
 			

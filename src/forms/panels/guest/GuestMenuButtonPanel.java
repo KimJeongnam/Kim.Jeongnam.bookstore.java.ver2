@@ -36,6 +36,7 @@ public class GuestMenuButtonPanel extends JPanel {
 		
 		panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		button = new JButton("구매요청 목록");
+		button.addActionListener(new GuestMenuListener());
 		button.setPreferredSize(new Dimension(130,30));
 		panel.add(button);
 		this.add(panel);
@@ -43,6 +44,7 @@ public class GuestMenuButtonPanel extends JPanel {
 
 		panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		button = new JButton("환불 요청");
+		button.addActionListener(new GuestMenuListener());
 		button.setPreferredSize(new Dimension(130,30));
 		panel.add(button);
 		this.add(panel);

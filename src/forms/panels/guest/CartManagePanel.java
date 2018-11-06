@@ -2,6 +2,7 @@ package forms.panels.guest;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -14,7 +15,7 @@ import javax.swing.border.TitledBorder;
 
 import forms.listener.guest.GuestCartListener;
 
-public class CartUpdateDeletePanel extends JPanel{
+public class CartManagePanel extends JPanel{
 
 	/**
 	 *  장바구니 관리 수정 입력 패널
@@ -24,11 +25,12 @@ public class CartUpdateDeletePanel extends JPanel{
 	private static JLabel label_bookName = new JLabel();
 	private static JTextField tf_wishStock = new JTextField(5);
 	
-	public CartUpdateDeletePanel() {
+	public CartManagePanel() {
 		this.setLayout(new BorderLayout());
 		
 		this.add(selectPanel(), "North");
-		this.add(buttonPanel(), "South");
+		this.add(buttonPanel(), "West");
+		this.add(buyButtonPanel(), "East");
 		
 	}
 	
@@ -85,6 +87,18 @@ public class CartUpdateDeletePanel extends JPanel{
 		return panel;
 	}
 	
+	private JPanel buyButtonPanel() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout(FlowLayout.RIGHT, 15, 15));
+		
+		JButton button = new JButton("구매 하기");
+		button.setPreferredSize(new Dimension(100, 35));
+		button.addActionListener(new GuestCartListener());
+		panel.add(button);
+		
+		return panel;
+	}
+	
 	public static void clear() {
 		setLabel_bookCode("");
 		setLabel_bookName("");
@@ -96,7 +110,7 @@ public class CartUpdateDeletePanel extends JPanel{
 	}
 
 	public static void setLabel_bookCode(String label_bookCode) {
-		CartUpdateDeletePanel.label_bookCode.setText(label_bookCode);
+		CartManagePanel.label_bookCode.setText(label_bookCode);
 	}
 
 	public static String getLabel_bookName() {
@@ -104,7 +118,7 @@ public class CartUpdateDeletePanel extends JPanel{
 	}
 
 	public static void setLabel_bookName(String label_bookName) {
-		CartUpdateDeletePanel.label_bookName.setText(label_bookName);
+		CartManagePanel.label_bookName.setText(label_bookName);
 	}
 
 	public static String getTf_wishStock() {
@@ -112,7 +126,7 @@ public class CartUpdateDeletePanel extends JPanel{
 	}
 
 	public static void setTf_wishStock(String tf_wishStock) {
-		CartUpdateDeletePanel.tf_wishStock.setText(tf_wishStock);
+		CartManagePanel.tf_wishStock.setText(tf_wishStock);
 	}
 	
 	/*public static void main(String[] args) {

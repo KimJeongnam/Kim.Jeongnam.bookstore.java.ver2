@@ -87,8 +87,8 @@ class CartTableClickEvent extends MouseAdapter{
 	public void mouseClicked(MouseEvent e) {
 		int row = table.getSelectedRow();
 		
-		CartUpdateDeletePanel.setLabel_bookCode((String)table.getValueAt(row, 0));
-		CartUpdateDeletePanel.setLabel_bookName((String)table.getValueAt(row, 1));
-		CartUpdateDeletePanel.setTf_wishStock((String)table.getValueAt(row, 4));
+		CartManagePanel.setLabel_bookCode((String)table.getValueAt(row, 0));
+		CartManagePanel.setLabel_bookName((String)table.getValueAt(row, 1));
+		CartManagePanel.setTf_wishStock((String)table.getValueAt(row, 4));
 	}
 }

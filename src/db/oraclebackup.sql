@@ -16,7 +16,7 @@ DROP TABLE permissions CASCADE CONSTRAINTS;
 CREATE TABLE books
 (
 	book_code varchar2(50) NOT NULL,
-	book_name varchar2(20) NOT NULL,
+	book_name varchar2(80) NOT NULL,
 	author varchar2(50) NOT NULL,
 	price number,
 	stock number NOT NULL,
@@ -38,6 +38,9 @@ CREATE TABLE orders
 (
 	order_code varchar2(50) NOT NULL,
 	user_id varchar2(50) NOT NULL,
+    order_date date default SYSDATE,
+    confirm_date date,
+    totalprice number,
 	payment_status number(1),
 	refund_ask number(1),
 	PRIMARY KEY (order_code)
@@ -193,5 +196,96 @@ SELECT count(c.book_code) "count", TO_CHAR(sum(c.wish_stock*b.price), 'L999,999,
 UPDATE carts SET wish_stock=10
 	WHERE user_id='user' 
 	AND book_code='';
+    
+DESC order_info;
+DESC orders;
 
-COMMIT;
+
+drop trigger trigger_update_orders;
+
+SET SERVEROUTPUT ON
+CREATE OR REPLACE TRIGGER trigger_update_orders
+    AFTER INSERT
+    ON order_info
+    FOR EACH ROW
+BEGIN
+    if inserting then
+        DBMS_OUTPUT.PUT_LINE('insert Trigger 발생');
+        
+        UPDATE orders SET
+            totalprice = totalprice+(SELECT price*:new.order_stock                       
+                                        FROM books
+                                        WHERE book_code = :new.book_code)
+            WHERE order_code = :new.order_code;
+    end if;
+END;
+/
+
+DESC orders;
+
+INSERT INTO orders(
+    order_code,
+    user_id,
+    totalprice,
+    payment_status,
+    refund_ask)
+    VALUES('OD0001', 'user', 0, 0, 0);
+
+
+INSERT INTO order_info
+    VALUES('OD0001', '8c4f9', 30);
+
+rollback;
+
+INSERT INTO orders
+    VALUES('OD0002', 'user', 0, 0, 0);
+
+INSERT INTO order_info
+    SELECT d.ordercode, d.bookcode, d.orderstock
+    FROM (SELECT 'OD0002' ordercode, '8c4f9' bookcode, 30 orderstock
+            FROM dual) d
+    WHERE d.orderstock < (SELECT stock
+                            FROM books
+                            WHERE book_code=d.bookcode
+                            AND delete_status <> 1);
+
+UPDATE books 
+    SET stock = stock-30
+    WHERE book_code = '';
+    
+delete from order_info;
+delete from orders;
+commit;
+
+DESC orders;
+DESC order_info;
+DESC books;
+
+-- 주문목록 주문 코드, 유저 id, 총액, 내역 갯수 조회 
+SELECT o1.order_code
+        , TO_CHAR(o1.order_date, 'YYYY-MM-DD') "date"
+        , TO_CHAR(o1.order_date, 'HH24:MI:SS') "time"
+        , (SELECT COUNT(*) 
+            FROM order_info o2
+            WHERE o2.order_code = o1.order_code) count
+        , o1.totalprice
+        FROM orders o1 
+        WHERE o1.payment_status = 0
+        AND o1.refund_ask=0
+        AND o1.user_id ='user'
+        GROUP BY o1.order_code, TO_CHAR(o1.order_date, 'YYYY-MM-DD'), TO_CHAR(o1.order_date, 'HH24:MI:SS'), user_id, o1.totalprice
+        ORDER BY TO_CHAR(o1.order_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.order_date, 'HH24:MI:SS') ASC;
+        
+        
+-- 주문상세 내역
+SELECT b.book_name, b.author, b.price, o.order_stock
+    FROM order_info o JOIN books b
+    ON o.book_code = b.book_code
+    WHERE o.order_code = 'ORDER_20181101061153YDXT'
+    ORDER BY b.book_name ASC;
+    
+    
+
+    
+    
+    

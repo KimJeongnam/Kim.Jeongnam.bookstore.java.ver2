@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import forms.panels.guest.CartTablePanel;
-import forms.panels.guest.CartUpdateDeletePanel;
+import forms.panels.guest.CartManagePanel;
 
 
 public class GuestCartForm extends JFrame{
@@ -42,7 +42,7 @@ public class GuestCartForm extends JFrame{
 		this.add(cartTablePanel, "North");
 		
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 25));
-		panel.add(new CartUpdateDeletePanel());
+		panel.add(new CartManagePanel());
 		
 		this.add(panel, "South");
 		

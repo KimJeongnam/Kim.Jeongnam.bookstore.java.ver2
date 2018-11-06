@@ -14,7 +14,7 @@ public class Code {
     public static final int MAIN_USER_ADD= 120; 		// 유저 추가
     
 	// GUEST
-    public static final int GUEST_CART_COUNT_TOTAL = 211;
+    public static final int GUEST_CART_COUNT_TOTAL = 299;
 	public static final int GUEST_CART_LIST = 201;   	// 장바구니 목록 
 	public static final int GUEST_CART_ADD = 202;   	// 장바구니에 책 추가 
 	public static final int GUEST_CART_UPDATE = 203; 	// 장바구니 수정
