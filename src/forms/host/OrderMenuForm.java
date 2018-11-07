@@ -2,10 +2,15 @@ package forms.host;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import forms.MainForm;
+import service.Session;
 
 public class OrderMenuForm extends JFrame{
 
@@ -14,7 +19,10 @@ public class OrderMenuForm extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	public static ConfirmListForm confirmlistform = null;
+	
 	public OrderMenuForm() {
+		this.setTitle("주문 관리 메뉴");
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 30,30));
 		
 		ActionListener l = e->{
@@ -22,7 +30,7 @@ public class OrderMenuForm extends JFrame{
 			
 			switch(command) {
 			case "주문 요청 목록":
-				new ConfirmListForm();
+				confirmlistform = new ConfirmListForm();
 				break;
 			}
 		};
@@ -41,7 +49,7 @@ public class OrderMenuForm extends JFrame{
 		this.add(panel);
 		
 		panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15,15));
-		button = new JButton("결산");
+		button = new JButton("결제 완료 목록");
 		button.addActionListener(l);
 		panel.add(button);
 		this.add(panel);
@@ -49,7 +57,17 @@ public class OrderMenuForm extends JFrame{
 		
 		this.setVisible(true);		
 		this.pack();
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setResizable(false);
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				OrderMenuForm frame = (OrderMenuForm)e.getWindow();
+				if(confirmlistform != null)
+					confirmlistform.dispose();
+				frame.dispose();
+			}
+		});
 	}
 	
 }

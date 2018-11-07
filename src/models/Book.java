@@ -1,12 +1,9 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import bookstore.exception.MapInValueException;
 import forms.panels.host.InsertBookPanel;
 
 public class Book {

@@ -17,7 +17,7 @@ import javax.swing.border.EmptyBorder;
 import forms.MainForm;
 import forms.listener.host.HostMenuButtonLitener;
 import forms.panels.host.BookTablePanel;
-import forms.panels.host.InsertBookPanel;
+import forms.panels.host.TotalPricePanel;
 import models.Code;
 import service.Session;
 
@@ -27,6 +27,7 @@ public class HostMenuForm extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	private static HostMenuForm instance = null;
+	public static OrderMenuForm ordermenuform = null;
 	
 	public static synchronized HostMenuForm createInstance() {
 		if(instance == null) {
@@ -42,16 +43,23 @@ public class HostMenuForm extends JFrame{
 	
 	private JPanel panel = null;
 	private BookTablePanel tablepanel = null;
+	private TotalPricePanel totalPricePanel = null;
 	
 	public HostMenuForm() {
 		this.setTitle(MainForm.getInstance().getTitle());
 		this.setLayout(new BorderLayout());
 		
 		// 상단 라벨 
-		panel = new JPanel();
-		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
+		JPanel topPanel = new JPanel(new BorderLayout());
+		panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
 		panel.add(new JLabel("관리자님 환영합니다."));
-		this.add(panel, "North");
+		topPanel.add(panel, "West");
+		
+		panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
+		totalPricePanel = new TotalPricePanel();
+		panel.add(totalPricePanel);
+		topPanel.add(panel,"East");
+		this.add(topPanel, "North");
 		
 		tablepanel = createLeftPanel();
 		panel = new JPanel();
@@ -78,6 +86,11 @@ public class HostMenuForm extends JFrame{
 				JFrame mainFrame = MainForm.getInstance();	// 메인 폼의 객체 get
 				Session.getInstance().logout();	// 로그아웃 처리
 				mainFrame.setVisible(true);
+				
+				//하위 프레임창 닫기.
+				if(ordermenuform != null) ordermenuform.dispose();
+				if(OrderMenuForm.confirmlistform != null) OrderMenuForm.confirmlistform.dispose();
+				
 				frame.close(); 		// 현재프레임 닫기.
 			}
 		});
@@ -131,5 +144,9 @@ public class HostMenuForm extends JFrame{
 	
 	public BookTablePanel getTablepanel() {
 		return tablepanel;
+	}
+
+	public TotalPricePanel getTotalPricePanel() {
+		return totalPricePanel;
 	}
 }

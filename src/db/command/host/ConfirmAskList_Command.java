@@ -8,9 +8,9 @@ import javax.swing.JCheckBox;
 
 import db.Oracledb;
 import db.command.Command;
-import models.ConfirmAsk;
+import models.Order;
 
-public class ConfirmList_Command implements Command{
+public class ConfirmAskList_Command implements Command{
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 	
@@ -36,10 +36,10 @@ public class ConfirmList_Command implements Command{
 
 		rs = pstmt.executeQuery();
 		
-		ConfirmAsk.list.clear();
+		Order.confirmAsklist.clear();
 		
 		while(rs.next()) {
-			ConfirmAsk data = new ConfirmAsk();
+			Order data = new Order();
 			data.setChecked(false);
 			data.setOrder_code(rs.getString("order_code"));
 			data.setUser_id(rs.getString("user_id"));
@@ -50,7 +50,7 @@ public class ConfirmList_Command implements Command{
 			
 			
 			
-			ConfirmAsk.list.add(data);
+			Order.confirmAsklist.add(data);
 		}
 		
 		pstmt.close();

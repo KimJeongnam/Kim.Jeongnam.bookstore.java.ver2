@@ -261,19 +261,21 @@ DESC orders;
 DESC order_info;
 DESC books;
 
--- 주문목록 주문 코드, 유저 id, 총액, 내역 갯수 조회 
+-- guest 구매요청 목록
+-- 어떠한 유저에대한
+-- 주문목록 주문 코드, 주문날짜, 총액, 내역 갯수 조회  
 SELECT o1.order_code
         , TO_CHAR(o1.order_date, 'YYYY-MM-DD') "date"
         , TO_CHAR(o1.order_date, 'HH24:MI:SS') "time"
         , (SELECT COUNT(*) 
             FROM order_info o2
             WHERE o2.order_code = o1.order_code) count
-        , o1.totalprice
+        ,  TO_CHAR(o1.totalprice, 'L999,999,999') "totalprice"
         FROM orders o1 
         WHERE o1.payment_status = 0
         AND o1.refund_ask=0
         AND o1.user_id ='user'
-        GROUP BY o1.order_code, TO_CHAR(o1.order_date, 'YYYY-MM-DD'), TO_CHAR(o1.order_date, 'HH24:MI:SS'), user_id, o1.totalprice
+        GROUP BY o1.order_code, TO_CHAR(o1.order_date, 'YYYY-MM-DD'), TO_CHAR(o1.order_date, 'HH24:MI:SS'), user_id, TO_CHAR(o1.totalprice, 'L999,999,999')
         ORDER BY TO_CHAR(o1.order_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.order_date, 'HH24:MI:SS') ASC;
         
         
@@ -284,8 +286,43 @@ SELECT b.book_name, b.author, b.price, o.order_stock
     WHERE o.order_code = 'ORDER_20181101061153YDXT'
     ORDER BY b.book_name ASC;
     
+-- host ConfirmAskList 
+-- 모든 유저들의 구매 요청 목록
+-- 주문목록 주문 코드, 주문날짜, 총액, 내역 갯수 조회  
+SELECT o1.order_code
+        , o1.user_id
+        , TO_CHAR(o1.order_date, 'YYYY-MM-DD') "date"
+        , TO_CHAR(o1.order_date, 'HH24:MI:SS') "time"
+        , (SELECT COUNT(*) 
+            FROM order_info o2
+            WHERE o2.order_code = o1.order_code) count
+        ,  TO_CHAR(o1.totalprice, 'L999,999,999') "totalprice"
+        FROM orders o1 
+        WHERE o1.payment_status = 0
+        AND o1.refund_ask=0
+        GROUP BY o1.order_code, o1.user_id, TO_CHAR(o1.order_date, 'YYYY-MM-DD'), TO_CHAR(o1.order_date, 'HH24:MI:SS'), user_id, TO_CHAR(o1.totalprice, 'L999,999,999')
+        ORDER BY TO_CHAR(o1.order_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.order_date, 'HH24:MI:SS') ASC;
     
+-- host 결산
+SELECT TO_CHAR(SUM(totalprice), 'L999,999,999,999') "totalprice"
+    FROM orders
+    WHERE payment_status = 1;
+    
+-- guest 구매완료목록
+-- 주문목록 주문 코드, 주문날짜, 총액, 내역 갯수 조회  
+SELECT o1.order_code
+        , TO_CHAR(o1.order_date, 'YYYY-MM-DD') "date"
+        , TO_CHAR(o1.order_date, 'HH24:MI:SS') "time"
+        , (SELECT COUNT(*) 
+            FROM order_info o2
+            WHERE o2.order_code = o1.order_code) count
+        ,  TO_CHAR(o1.totalprice, 'L999,999,999') "totalprice"
+        FROM orders o1 
+        WHERE o1.payment_status = 1
+        AND o1.refund_ask=0
+        AND o1.user_id ='user'
+        GROUP BY o1.order_code, TO_CHAR(o1.order_date, 'YYYY-MM-DD'), TO_CHAR(o1.order_date, 'HH24:MI:SS'), user_id, TO_CHAR(o1.totalprice, 'L999,999,999')
+        ORDER BY TO_CHAR(o1.order_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.order_date, 'HH24:MI:SS') ASC;
 
-    
     
     

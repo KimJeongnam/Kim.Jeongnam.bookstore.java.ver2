@@ -2,8 +2,9 @@ package models;
 
 import java.util.ArrayList;
 
-public class ConfirmAsk {
-	public static ArrayList<ConfirmAsk> list = new ArrayList<ConfirmAsk>();
+public class Order {
+	public static ArrayList<Order> confirmAsklist = new ArrayList<Order>();		//주문요청 리스트
+	public static ArrayList<Order> buylist = new ArrayList<Order>();			//구매 리스트
 	
 	private Boolean checked;
 	private String order_code;		// 주문 코드

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-import models.ConfirmAsk;
+import models.Order;
 
 public class ConfirmTableModel extends AbstractTableModel{
 	/**
@@ -12,12 +12,12 @@ public class ConfirmTableModel extends AbstractTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 	String[] columnNames = {"No.", "Check", "요청인", "Date", "Time", "건수", "총 액"};
-	private ArrayList<ConfirmAsk> list;
+	private ArrayList<Order> list;
 	
 	/*Object[][] data = null;*/
 	
 	public ConfirmTableModel() {
-		this.list = ConfirmAsk.list;
+		this.list = Order.confirmAsklist;
 	}
 	public int getRowCount() {
         return list.size();
@@ -28,7 +28,7 @@ public class ConfirmTableModel extends AbstractTableModel{
     }
 
     public Object getValueAt(int rowIndex, int columnIndex) {
-        ConfirmAsk data = list.get(rowIndex);
+        Order data = list.get(rowIndex);
         
        switch(columnIndex) {
        case 0:

@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,12 +15,14 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
+import forms.panels.host.TotalPricePanel;
 import forms.panels.main.OrderListPanel;
 import forms.tables.ConfirmTableModel;
 import forms.tables.OrderInfoTableModel;
 import models.Code;
-import models.ConfirmAsk;
+import models.Order;
 import service.Services;
+import service.main.host.OrderConfirm;
 
 public class ConfirmListForm extends JFrame{
 
@@ -41,12 +44,14 @@ public class ConfirmListForm extends JFrame{
 		
 		this.setVisible(true);
 		this.pack();
+		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 	
 	public JPanel tablePanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		Services.getInstance().getMap().get(Code.HOST_CONFIRM_ASK_LIST).activation();
+		
 		tablepanel = new OrderListPanel(
 				new ConfirmTableModel(),
 				new OrderInfoTableModel());
@@ -62,33 +67,42 @@ public class ConfirmListForm extends JFrame{
 			
 			switch(command) {
 			case "전체 체크/해제":
-				if(ConfirmAsk.list.size()== 0) {
+				if(Order.confirmAsklist.size()== 0) {
 					JOptionPane.showMessageDialog(null, "주문 요청 목록이 비어있습니다."
 							, "Fail", JOptionPane.ERROR_MESSAGE);
 					break;
 				}
 								
 				if(!buttonflag) {
-					for(ConfirmAsk d : ConfirmAsk.list) {
+					for(Order d : Order.confirmAsklist) {
 						d.setChecked(true);
 					}
 					buttonflag = true;
 				}else {
-					for(ConfirmAsk d : ConfirmAsk.list) {
+					for(Order d : Order.confirmAsklist) {
 						d.setChecked(false);
 					}
 					buttonflag = false;
 				}
-				tablepanel.orderListCheckUpdate(new ConfirmTableModel());	
-				tablepanel.setTableCell(tablepanel.getOrderListTable(), 100, 6);
-				tablepanel.setTableCell(tablepanel.getOrderListTable(), 20, 0);
+				listtableUpdate();
 				
 				break;
 			case "구매 승인":
-				for(ConfirmAsk d : ConfirmAsk.list) {
-					if(d.isChecked())
-						System.out.println("Confirm() : "+d.getOrder_code());
+				if(Order.confirmAsklist.size() == 0){ 
+					JOptionPane.showMessageDialog(null, "주문 요청 목록이 비어있습니다."
+						, "Fail", JOptionPane.ERROR_MESSAGE); 
+					break;
 				}
+				ArrayList<String> order_codes = new ArrayList<String>();
+				for(Order d : Order.confirmAsklist) {
+					if(d.isChecked())
+						order_codes.add(d.getOrder_code());
+				}
+				new OrderConfirm(order_codes).activation();
+				Services.getInstance().getMap().get(Code.HOST_CONFIRM_ASK_LIST).activation();
+				listtableUpdate();
+				infotableUpdate();
+				TotalPricePanel.update();
 				break;
 			}
 		};
@@ -105,6 +119,21 @@ public class ConfirmListForm extends JFrame{
 		panel.add(buttonPanel, "South");
 		
 		return panel;
+	}
+	private void listtableUpdate() {
+		tablepanel.orderListCheckUpdate(new ConfirmTableModel());	
+		tablepanel.setTableCell(tablepanel.getOrderListTable(), 100, 6);
+		tablepanel.setTableCell(tablepanel.getOrderListTable(), 20, 0);
+	}
+	
+	private void infotableUpdate() {
+		tablepanel.getSelectNo().setText("None");
+		
+		tablepanel.orderListCheckUpdate(new ConfirmTableModel());
+		tablepanel.orderInfoUpdate("");
+		
+		tablepanel.setTableCell(tablepanel.getOrderListTable(), 100, 6);
+		tablepanel.setTableCell(tablepanel.getOrderListTable(), 20, 0);
 	}
 	
 	public static void main(String[] args) {
@@ -127,7 +156,7 @@ class ConfirmAskTableAdapter extends MouseAdapter{
 	public void mouseClicked(MouseEvent e) {
 		int row = table.getSelectedRow();
 		
-		ConfirmAsk data = ConfirmAsk.list.get(row);
+		Order data = Order.confirmAsklist.get(row);
 		if(data.isChecked())
 			data.setChecked(false);
 		else
