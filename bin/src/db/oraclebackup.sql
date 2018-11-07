@@ -309,10 +309,10 @@ SELECT TO_CHAR(SUM(totalprice), 'L999,999,999,999') "totalprice"
     WHERE payment_status = 1;
     
 -- guest 구매완료목록
--- 주문목록 주문 코드, 승인날짜, 총액, 내역 갯수 조회  
+-- 주문목록 주문 코드, 주문날짜, 총액, 내역 갯수 조회  
 SELECT o1.order_code
-        , TO_CHAR(o1.confirm_date, 'YYYY-MM-DD') "date"
-        , TO_CHAR(o1.confirm_date, 'HH24:MI:SS') "time"
+        , TO_CHAR(o1.order_date, 'YYYY-MM-DD') "date"
+        , TO_CHAR(o1.order_date, 'HH24:MI:SS') "time"
         , (SELECT COUNT(*) 
             FROM order_info o2
             WHERE o2.order_code = o1.order_code) count
@@ -321,8 +321,8 @@ SELECT o1.order_code
         WHERE o1.payment_status = 1
         AND o1.refund_ask=0
         AND o1.user_id ='user'
-        GROUP BY o1.order_code, TO_CHAR(o1.confirm_date, 'YYYY-MM-DD'), TO_CHAR(o1.confirm_date, 'HH24:MI:SS'), user_id, TO_CHAR(o1.totalprice, 'L999,999,999')
-        ORDER BY TO_CHAR(o1.confirm_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.confirm_date, 'HH24:MI:SS') ASC;
+        GROUP BY o1.order_code, TO_CHAR(o1.order_date, 'YYYY-MM-DD'), TO_CHAR(o1.order_date, 'HH24:MI:SS'), user_id, TO_CHAR(o1.totalprice, 'L999,999,999')
+        ORDER BY TO_CHAR(o1.order_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.order_date, 'HH24:MI:SS') ASC;
 
     
     

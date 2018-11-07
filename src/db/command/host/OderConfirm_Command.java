@@ -40,7 +40,8 @@ public class OderConfirm_Command implements Command{
 			int rowsInserted = 0;
 	
 			String sql = "UPDATE orders \r\n" + 
-					"    SET payment_status = 1\r\n" + 
+					"    SET payment_status = 1\r\n" +
+					"	 , confirm_date = SYSDATE \r\n"+
 					"    WHERE order_code = ?";
 	
 			pstmt = Oracledb.getInstance().getConnection().prepareStatement(sql);
