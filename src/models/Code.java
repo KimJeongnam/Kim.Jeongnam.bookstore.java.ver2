@@ -32,7 +32,7 @@ public class Code {
 	public static final int HOST_BOOK_UPDATE = 302; 	// 책 수정
 	public static final int HOST_BOOK_DELETE = 303; 	// 책삭제
 	
-	public static final int HOST_ORDER_LIST = 310; 		// 주문 목록
+	public static final int HOST_CONFIRM_ASK_LIST = 310; 		// 주문 목록
 	public static final int HOST_ORDER_CONFIRM = 311;	// 결제 승인 
 	public static final int HOST_ORDER_CANCLE = 312; 	// 결제 취소  
 	public static final int HOST_REFUND_CONFIRM =320;	// 환불요청 승인

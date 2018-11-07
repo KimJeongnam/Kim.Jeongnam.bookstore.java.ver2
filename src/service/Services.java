@@ -19,6 +19,7 @@ import service.main.host.BookAdd;
 import service.main.host.BookDelete;
 import service.main.host.BookList;
 import service.main.host.BookUpdate;
+import service.main.host.ConfirmAskList;
 import service.main.host.GetCartCount_TotalPrice;
 
 /*
@@ -41,6 +42,9 @@ public class Services {
 		map.put(Code.HOST_BOOK_ADD, new BookAdd());
 		map.put(Code.HOST_BOOK_UPDATE, new BookUpdate());
 		map.put(Code.HOST_BOOK_DELETE, new BookDelete());
+		
+		//host order service
+		map.put(Code.HOST_CONFIRM_ASK_LIST, new ConfirmAskList());
 		
 		// guest cart service
 		map.put(Code.GUEST_CART_COUNT_TOTAL, new GetCartCount_TotalPrice());

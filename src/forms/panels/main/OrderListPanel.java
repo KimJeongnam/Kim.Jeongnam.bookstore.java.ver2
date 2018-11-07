@@ -1,9 +1,9 @@
 package forms.panels.main;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -25,18 +25,21 @@ public class OrderListPanel extends MyTablePanel{
 	 *  주문 목록 & 구매요청 목록 & 환불요청 등등 기본 Table 패널
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTable orderListTable = null;
-	private JTable orderInfoTable = null;
-	AbstractTableModel orderListModel = null;
-	AbstractTableModel orderInfoModel = null;
-	
+	protected JTable orderListTable = null;
+	protected JTable orderInfoTable = null;
+/*	private AbstractTableModel orderListModel = null;
+	private AbstractTableModel orderInfoModel = null;*/
+	private MouseAdapter adapter = null;
 	private JLabel selectNo = null;
 	
-	public OrderListPanel(Service service, AbstractTableModel orderListModel, AbstractTableModel orderInfoModel) {
-		service.activation();
-		this.orderListModel = orderListModel;
-		this.orderInfoModel = orderInfoModel;
-		
+	public OrderListPanel(AbstractTableModel orderListModel, AbstractTableModel orderInfoModel) {
+		orderListTable = new JTable(orderListModel);
+		orderInfoTable = new JTable(orderInfoModel);
+	}
+	
+	public JPanel setup() {
+		if(adapter == null)
+			
 		this.setLayout(new BorderLayout());
 		
 		JPanel panel= new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
@@ -50,6 +53,7 @@ public class OrderListPanel extends MyTablePanel{
 		panel.add(orderInfoPanel());
 		
 		this.add(panel, "East");
+		return this;
 	}
 	
 	private JPanel orderListPanel() {
@@ -61,17 +65,14 @@ public class OrderListPanel extends MyTablePanel{
                 TitledBorder.LEFT, 
                 TitledBorder.TOP));
 		
-		if(orderListModel == null) return null;
-		
-		orderListTable = new JTable(orderListModel);
-		orderListTable.addMouseListener(new BuyAskTableAdapter(orderListTable, this));
-		DefaultTableRenderer(orderListTable);
+		orderListTable.addMouseListener(adapter);
+		/*DefaultTableRenderer(orderListTable);*/
 		orderListTable.getTableHeader().setReorderingAllowed(false);
 		orderListTable.getTableHeader().setResizingAllowed(false);
-		
-		setTableCell(orderListTable, 100);
+		orderListTable.setFillsViewportHeight(true);
 		
 		JScrollPane scrollPane = new JScrollPane(orderListTable);
+		scrollPane.setPreferredSize(new Dimension(650, 500));
 		
 		panel.add(scrollPane);
 		
@@ -82,8 +83,7 @@ public class OrderListPanel extends MyTablePanel{
 	private JPanel orderInfoPanel() {
 		JPanel panel = new JPanel();
 		OrderInfo.list.clear();
-		
-		if(orderInfoModel == null) return null;
+
 		
 		panel.setLayout(new BorderLayout());
 		
@@ -92,7 +92,6 @@ public class OrderListPanel extends MyTablePanel{
                 TitledBorder.LEFT, 
                 TitledBorder.TOP));
 		                                     
-		orderInfoTable = new JTable(orderInfoModel);
 		DefaultTableRenderer(orderInfoTable);
 		orderInfoTable.getTableHeader().setReorderingAllowed(false);
 		orderInfoTable.getTableHeader().setResizingAllowed(false);
@@ -112,6 +111,12 @@ public class OrderListPanel extends MyTablePanel{
 		return panel;
 	}
 	
+	public void orderListCheckUpdate(AbstractTableModel model) {
+		if(model == null) return;
+		orderListTable.setModel(model);
+	}
+	
+	
 	public void orderInfoUpdate(String order_code) {
 		new OrderInfo_Service(order_code).activation();
 		
@@ -119,19 +124,6 @@ public class OrderListPanel extends MyTablePanel{
 		orderInfoTable.setModel(model);
 		DefaultTableRenderer(orderInfoTable);
 		setTableCell(orderInfoTable, 100, 2);
-	}
-	
-	public void addOrderListTableListener(MouseAdapter adapter) {
-		if(orderListTable != null) {
-			orderListTable.addMouseListener(adapter);
-		}
-	}
-	
-	
-	public void addOrderInfoTableListener(MouseAdapter adapter) {
-		if(orderInfoTable != null) {
-			orderInfoTable.addMouseListener(adapter);
-		}
 	}
 
 	public JTable getOrderListTable() {
@@ -154,23 +146,13 @@ public class OrderListPanel extends MyTablePanel{
 		return selectNo;
 	}
 
+	public MouseAdapter getAdapter() {
+		return adapter;
+	}
+
+	public void setAdapter(MouseAdapter adapter) {
+		this.adapter = adapter;
+	}
+
 }
 
-class BuyAskTableAdapter extends MouseAdapter{
-	JTable table;
-	OrderListPanel orderlistpanel;
-	public BuyAskTableAdapter(JTable table, OrderListPanel orderlistpanel) {
-		this.table = table;
-		this.orderlistpanel = orderlistpanel;
-	}
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		int row = table.getSelectedRow();
-		
-		String order_code = BuyAsk.list.get(row).getOrder_code();
-		orderlistpanel.getSelectNo().setText(Integer.toString(row+1));
-		
-		
-		orderlistpanel.orderInfoUpdate(order_code);
-	}
-}

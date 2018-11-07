@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import forms.host.HostMenuForm;
+import forms.host.OrderMenuForm;
 import forms.panels.host.InsertBookPanel;
 import models.Code;
 import service.Services;
@@ -58,6 +59,9 @@ public class HostMenuButtonLitener implements ActionListener{
 				e2.printStackTrace();
 				System.err.println("HostMenuButtonLitener->HostMenuForm.getInstance()");
 			}
+			break;
+		case "주문 관리":
+			new OrderMenuForm();
 			break;
 		}
 		

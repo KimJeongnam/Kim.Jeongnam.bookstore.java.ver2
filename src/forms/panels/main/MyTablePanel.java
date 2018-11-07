@@ -17,18 +17,21 @@ public class MyTablePanel extends JPanel{
 	public MyTablePanel() {}
 	
 	// 테이블 컬럼 가운데 정렬 함수
-		protected void DefaultTableRenderer(JTable t) {
+		public void DefaultTableRenderer(JTable t) {
 			DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer(); // 디폴트테이블셀렌더러를 생성
 			defaultTableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER); // 렌더러의 가로정렬을 CENTER로
 
 			TableColumnModel tableColumnModel = t.getColumnModel(); // 정렬할 테이블의 컬럼모델을 가져옴
 
-			for(int i=0; i<t.getColumnCount(); i++) 
-				tableColumnModel.getColumn(i).setCellRenderer(defaultTableCellRenderer);
+			for(int i=0; i<t.getColumnCount(); i++) {
+				Object o = t.getColumnClass(i);
+				if(!(o instanceof Boolean))
+					tableColumnModel.getColumn(i).setCellRenderer(defaultTableCellRenderer);
+			}
 		}
 		
 		// 원하는 컬럼 의 사이즈를 변경하는 함수 (변경할 테이블, 사이즈, 변경할 컬럼값...)
-		protected void setTableCell(JTable table, int size, int ...cols) {
+		public void setTableCell(JTable table, int size, int ...cols) {
 			TableColumn column = null;
 			
 			for (int i = 0; i < table.getColumnCount(); i++) {
