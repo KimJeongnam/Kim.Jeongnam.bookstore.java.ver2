@@ -61,6 +61,7 @@ public class GuestCartForm extends JFrame{
 	}
 	
 	public void close() {
+		GuestMenuForm.frames.remove(this);
 		this.dispose();
 		instance = null;
 		System.gc();

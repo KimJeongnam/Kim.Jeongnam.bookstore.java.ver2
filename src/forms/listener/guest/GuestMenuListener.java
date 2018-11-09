@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import forms.guest.GuestBuyAskForm;
 import forms.guest.GuestCartForm;
 import forms.guest.GuestMenuForm;
+import forms.guest.RefundAskForm;
 import forms.panels.guest.CarTotalCountPricePanel;
 import forms.panels.guest.CartManagePanel;
 import models.Code;
@@ -17,7 +18,7 @@ public class GuestMenuListener implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		String command = arg0.getActionCommand();
-		
+				
 		switch(command) {
 		case "장바구니에 추가":
 			Services.getInstance().getMap().get(Code.GUEST_CART_ADD).activation();
@@ -27,10 +28,13 @@ public class GuestMenuListener implements ActionListener{
 			break;
 			
 		case "장바구니 관리":
-			GuestCartForm.createInstance();
+			GuestMenuForm.frames.add(GuestCartForm.createInstance());
 			break;
 		case "구매요청 목록":
-			new GuestBuyAskForm();
+			GuestMenuForm.frames.add(new GuestBuyAskForm());
+			break;
+		case "환불 요청":
+			GuestMenuForm.frames.add(new RefundAskForm());
 			break;
 		}
 		

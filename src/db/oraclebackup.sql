@@ -221,6 +221,39 @@ BEGIN
 END;
 /
 
+-- order_info 컬럼 삭제시 발생하는 트리거로 컬럼이 지워지면 books에있는 book_code의 수량을 다시 채운다.
+SET SERVEROUTPUT ON
+CREATE OR REPLACE TRIGGER trigger_delete_orderinfo
+    AFTER DELETE
+    ON order_info
+    FOR EACH ROW
+BEGIN    
+    DBMS_OUTPUT.PUT_LINE('order_info delete Trigger 발생');
+        
+    UPDATE books 
+        SET stock = stock+:old.order_stock;
+END;
+/
+
+-- orders 컬럼 삭제시 orders컬럼 삭제 전에 발생하는 트리거 로서 자식 테이블을 모두 지운다.
+SET SERVEROUTPUT ON
+CREATE OR REPLACE TRIGGER trigger_delete_orders_before
+    BEFORE DELETE
+    ON orders
+    FOR EACH ROW
+BEGIN    
+    DBMS_OUTPUT.PUT_LINE('order delete before Trigger 발생');
+        
+    DELETE FROM order_info
+        WHERE order_code = :old.order_code;
+    
+END;
+/
+
+delete from orders
+    WHERE order_code = 'ORDER_20181108042614OGDZ';
+
+rollback;
 DESC orders;
 
 INSERT INTO orders(
@@ -300,7 +333,7 @@ SELECT o1.order_code
         FROM orders o1 
         WHERE o1.payment_status = 0
         AND o1.refund_ask=0
-        GROUP BY o1.order_code, o1.user_id, TO_CHAR(o1.order_date, 'YYYY-MM-DD'), TO_CHAR(o1.order_date, 'HH24:MI:SS'), user_id, TO_CHAR(o1.totalprice, 'L999,999,999')
+        GROUP BY o1.order_code, o1.user_id, TO_CHAR(o1.order_date, 'YYYY-MM-DD'), TO_CHAR(o1.order_date, 'HH24:MI:SS'), TO_CHAR(o1.totalprice, 'L999,999,999')
         ORDER BY TO_CHAR(o1.order_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.order_date, 'HH24:MI:SS') ASC;
     
 -- host 결산
@@ -321,7 +354,31 @@ SELECT o1.order_code
         WHERE o1.payment_status = 1
         AND o1.refund_ask=0
         AND o1.user_id ='user'
-        GROUP BY o1.order_code, TO_CHAR(o1.confirm_date, 'YYYY-MM-DD'), TO_CHAR(o1.confirm_date, 'HH24:MI:SS'), user_id, TO_CHAR(o1.totalprice, 'L999,999,999')
+        GROUP BY o1.order_code
+        , TO_CHAR(o1.confirm_date, 'YYYY-MM-DD')
+        , TO_CHAR(o1.confirm_date, 'HH24:MI:SS')
+        , user_id
+        , TO_CHAR(o1.totalprice, 'L999,999,999')
+        ORDER BY TO_CHAR(o1.confirm_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.confirm_date, 'HH24:MI:SS') ASC;
+        
+    
+--환불 요청 목록 조회
+SELECT o1.order_code
+        , TO_CHAR(o1.confirm_date, 'YYYY-MM-DD') "date"
+        , TO_CHAR(o1.confirm_date, 'HH24:MI:SS') "time"
+        , o1.user_id
+        , (SELECT COUNT(*) 
+            FROM order_info o2
+            WHERE o2.order_code = o1.order_code) count
+        ,  TO_CHAR(o1.totalprice, 'L999,999,999') "totalprice"
+        FROM orders o1 
+        WHERE o1.payment_status = 1
+        AND o1.refund_ask=1
+        GROUP BY o1.order_code
+        , o1.user_id
+        , TO_CHAR(o1.confirm_date, 'YYYY-MM-DD')
+        , TO_CHAR(o1.confirm_date, 'HH24:MI:SS')
+        , TO_CHAR(o1.totalprice, 'L999,999,999')
         ORDER BY TO_CHAR(o1.confirm_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.confirm_date, 'HH24:MI:SS') ASC;
 
     

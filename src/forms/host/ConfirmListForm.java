@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -15,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
+import forms.panels.guest.CartManagePanel;
 import forms.panels.host.TotalPricePanel;
 import forms.panels.main.OrderListPanel;
 import forms.tables.ConfirmTableModel;
@@ -32,6 +35,55 @@ public class ConfirmListForm extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private OrderListPanel tablepanel;
 	private Boolean buttonflag = false;
+	private ActionListener l = e->  {
+		String command = e.getActionCommand();
+		
+		switch(command) {
+		case "전체 체크/해제":
+			if(Order.confirmAsklist.size()== 0) {
+				JOptionPane.showMessageDialog(null, "주문 요청 목록이 비어있습니다."
+						, "Fail", JOptionPane.ERROR_MESSAGE);
+				break;
+			}
+			
+			if(!buttonflag) {
+				for(Order d : Order.confirmAsklist) {
+					d.setChecked(true);
+				}
+				buttonflag = true;
+			}else {
+				for(Order d : Order.confirmAsklist) {
+					d.setChecked(false);
+				}
+				buttonflag = false;
+			}
+			listtableUpdate();
+			
+			break;
+		case "구매 승인":
+			if(Order.confirmAsklist.size() == 0){ 
+				JOptionPane.showMessageDialog(null, "주문 요청 목록이 비어있습니다."
+					, "Fail", JOptionPane.ERROR_MESSAGE); 
+				break;
+			}
+			int result = JOptionPane.showConfirmDialog(null,  "총 "+Order.getCheckCount(Order.confirmAsklist)+"건 구매 승인 하시겠습니까?", "책 코드 :"+
+					CartManagePanel.getLabel_bookCode()+ "수량 : "+CartManagePanel.getTf_wishStock()
+					, JOptionPane.OK_CANCEL_OPTION);
+			if(result!=0)
+				break;
+			ArrayList<String> order_codes = new ArrayList<String>();
+			for(Order d : Order.confirmAsklist) {
+				if(d.isChecked())
+					order_codes.add(d.getOrder_code());
+			}
+			new OrderConfirm(order_codes).activation();
+			Services.getInstance().getMap().get(Code.HOST_CONFIRM_ASK_LIST).activation();
+			listtableUpdate();
+			infotableUpdate();
+			TotalPricePanel.update();
+			break;
+		}
+	};
 	
 	public ConfirmListForm() {
 		this.setTitle("주문 요청 목록");
@@ -45,7 +97,15 @@ public class ConfirmListForm extends JFrame{
 		this.setVisible(true);
 		this.pack();
 		this.setResizable(false);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				JFrame frame = (JFrame)e.getWindow();
+				HostMenuForm.frames.remove(frame);
+				frame.dispose();
+			}
+		});
 	}
 	
 	public JPanel tablePanel() {
@@ -62,50 +122,6 @@ public class ConfirmListForm extends JFrame{
 		
 		tablepanel.setTableCell(tablepanel.getOrderListTable(), 100, 6);
 		tablepanel.setTableCell(tablepanel.getOrderListTable(), 20, 0);
-		ActionListener l = e->  {
-			String command = e.getActionCommand();
-			
-			switch(command) {
-			case "전체 체크/해제":
-				if(Order.confirmAsklist.size()== 0) {
-					JOptionPane.showMessageDialog(null, "주문 요청 목록이 비어있습니다."
-							, "Fail", JOptionPane.ERROR_MESSAGE);
-					break;
-				}
-								
-				if(!buttonflag) {
-					for(Order d : Order.confirmAsklist) {
-						d.setChecked(true);
-					}
-					buttonflag = true;
-				}else {
-					for(Order d : Order.confirmAsklist) {
-						d.setChecked(false);
-					}
-					buttonflag = false;
-				}
-				listtableUpdate();
-				
-				break;
-			case "구매 승인":
-				if(Order.confirmAsklist.size() == 0){ 
-					JOptionPane.showMessageDialog(null, "주문 요청 목록이 비어있습니다."
-						, "Fail", JOptionPane.ERROR_MESSAGE); 
-					break;
-				}
-				ArrayList<String> order_codes = new ArrayList<String>();
-				for(Order d : Order.confirmAsklist) {
-					if(d.isChecked())
-						order_codes.add(d.getOrder_code());
-				}
-				new OrderConfirm(order_codes).activation();
-				Services.getInstance().getMap().get(Code.HOST_CONFIRM_ASK_LIST).activation();
-				listtableUpdate();
-				infotableUpdate();
-				TotalPricePanel.update();
-				break;
-			}
-		};
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
 		JButton button = new JButton("전체 체크/해제");

@@ -11,7 +11,7 @@ public class BuyAskTableModel extends AbstractTableModel{
 	 *  구매요청 목록 테이블 모델
 	 */
 	private static final long serialVersionUID = 1L;
-	private String[] columnNames = {"No.", "Date", "Time", "건수", "총 액"};
+	private String[] columnNames = {"No.", "요청 날짜", "요청 시간", "건수", "총 액"};
 	private ArrayList<BuyAsk> list;
 	
 	public BuyAskTableModel() {
@@ -47,7 +47,7 @@ public class BuyAskTableModel extends AbstractTableModel{
 		case 2:
 			return data.getTime();
 		case 3:
-			return data.getCount();
+			return Integer.parseInt(data.getCount());
 		case 4:
 			return data.getTotalPrice();
 		}

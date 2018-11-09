@@ -5,6 +5,7 @@ import java.util.Map;
 
 import models.Code;
 import service.guest.BuyAskList;
+import service.guest.BuyList;
 import service.guest.CartAdd;
 import service.guest.CartAllDelete;
 import service.guest.CartBuy;
@@ -20,7 +21,9 @@ import service.main.host.BookDelete;
 import service.main.host.BookList;
 import service.main.host.BookUpdate;
 import service.main.host.ConfirmAskList;
+import service.main.host.ConfirmDoneList;
 import service.main.host.GetCartCount_TotalPrice;
+import service.main.host.RefundList;
 
 /*
  * 각 서비스들을 저장하고 있는 클래스 
@@ -45,6 +48,8 @@ public class Services {
 		
 		//host order service
 		map.put(Code.HOST_CONFIRM_ASK_LIST, new ConfirmAskList());
+		map.put(Code.HOST_REFUND_LIST, new RefundList());
+		map.put(Code.HOST_CONFIRM_DONE_LIST, new ConfirmDoneList());
 		
 		// guest cart service
 		map.put(Code.GUEST_CART_COUNT_TOTAL, new GetCartCount_TotalPrice());
@@ -58,7 +63,7 @@ public class Services {
 		
 		// guest refund & buyAsk
 		map.put(Code.GUEST_BUY_ASK_LIST, new BuyAskList());
-		
+		map.put(Code.GUEST_BUY_LIST, new BuyList());
 	}
 	
 	public Map<Integer, Service> getMap() { return map; }

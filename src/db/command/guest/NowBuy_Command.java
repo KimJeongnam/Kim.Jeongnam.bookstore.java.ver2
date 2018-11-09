@@ -83,7 +83,7 @@ public class NowBuy_Command implements Command{
 			if(rowsInserted == 0) {
 				con.rollback(savepoint1);
 				commit();
-				throw new SQLException("해당 책의 수량이 남아있지 않습니다.! 책 코드 : "+cart.getBook_code()+
+				throw new SQLException("해당 책의 수량이 남아있지 않거나 지워진 책입니다.! 책 코드 : "+cart.getBook_code()+
 						" 책제목 : "+cart.getBook_name());
 			}
 			

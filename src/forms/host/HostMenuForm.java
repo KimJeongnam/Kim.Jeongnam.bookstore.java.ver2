@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,7 +28,7 @@ public class HostMenuForm extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	private static HostMenuForm instance = null;
-	public static OrderMenuForm ordermenuform = null;
+	public static ArrayList<JFrame> frames = new ArrayList<JFrame>(); 
 	
 	public static synchronized HostMenuForm createInstance() {
 		if(instance == null) {
@@ -88,9 +89,12 @@ public class HostMenuForm extends JFrame{
 				mainFrame.setVisible(true);
 				
 				//하위 프레임창 닫기.
-				if(ordermenuform != null) ordermenuform.dispose();
+				for(JFrame f: frames) {
+					f.dispose();
+				}
+				/*if(ordermenuform != null) ordermenuform.dispose();
 				if(OrderMenuForm.confirmlistform != null) OrderMenuForm.confirmlistform.dispose();
-				
+				if(OrderMenuForm.refundtableform != null) OrderMenuForm.refundtableform.dispose();*/
 				frame.close(); 		// 현재프레임 닫기.
 			}
 		});

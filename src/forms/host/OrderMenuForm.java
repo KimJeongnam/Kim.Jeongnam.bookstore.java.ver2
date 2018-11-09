@@ -19,8 +19,6 @@ public class OrderMenuForm extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static ConfirmListForm confirmlistform = null;
-	
 	public OrderMenuForm() {
 		this.setTitle("주문 관리 메뉴");
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 30,30));
@@ -30,7 +28,13 @@ public class OrderMenuForm extends JFrame{
 			
 			switch(command) {
 			case "주문 요청 목록":
-				confirmlistform = new ConfirmListForm();
+				HostMenuForm.frames.add(new ConfirmListForm());
+				break;
+			case "환불 요청 목록":
+				HostMenuForm.frames.add(new RefundTableForm());
+				break;
+			case "결제 완료 목록":
+				HostMenuForm.frames.add(new ConfirmDoneForm());
 				break;
 			}
 		};
@@ -62,9 +66,8 @@ public class OrderMenuForm extends JFrame{
 			@Override
 			public void windowClosing(WindowEvent e) {
 				// TODO Auto-generated method stub
-				OrderMenuForm frame = (OrderMenuForm)e.getWindow();
-				if(confirmlistform != null)
-					confirmlistform.dispose();
+				JFrame frame = (JFrame)e.getWindow();
+				HostMenuForm.frames.remove(frame);
 				frame.dispose();
 			}
 		});

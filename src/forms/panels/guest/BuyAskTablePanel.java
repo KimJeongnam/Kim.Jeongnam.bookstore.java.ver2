@@ -17,6 +17,11 @@ import service.Services;
 
 public class BuyAskTablePanel extends JPanel{
 	
+	/**
+	 * 구매요청 테이블 패널
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public BuyAskTablePanel() {
 		Services.getInstance().getMap().get(Code.GUEST_BUY_ASK_LIST).activation();
 		

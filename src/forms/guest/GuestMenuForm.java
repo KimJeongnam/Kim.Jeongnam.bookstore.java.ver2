@@ -1,21 +1,17 @@
 package forms.guest;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import forms.MainForm;
-import forms.listener.guest.GuestMenuListener;
 import forms.panels.guest.CarTotalCountPricePanel;
 import forms.panels.guest.CartAddNowBuyPanel;
 import forms.panels.guest.GuestMenuButtonPanel;
@@ -27,6 +23,8 @@ public class GuestMenuForm extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private static GuestMenuForm instance = null;
+	public static ArrayList<JFrame> frames = new  ArrayList<JFrame>();
+	
 	public static synchronized GuestMenuForm createInstance(String userid) {
 		if(instance == null) {
 			instance = new GuestMenuForm(userid);
@@ -77,6 +75,11 @@ public class GuestMenuForm extends JFrame {
 				JFrame mainFrame = MainForm.getInstance();
 				mainFrame.setVisible(true);
 				Session.getInstance().logout(); // 로그아웃 처리
+				
+				for(JFrame a: frames) {
+					a.dispose();
+				}
+				
 				frame.close();
 			}
 		});

@@ -61,7 +61,7 @@ public class HostMenuButtonLitener implements ActionListener{
 			}
 			break;
 		case "주문 관리":
-			HostMenuForm.ordermenuform = new OrderMenuForm();
+			HostMenuForm.frames.add(new OrderMenuForm());
 			break;
 		}
 		

@@ -31,6 +31,7 @@ public class OrderListPanel extends MyTablePanel{
 	private AbstractTableModel orderInfoModel = null;*/
 	private MouseAdapter adapter = null;
 	private JLabel selectNo = null;
+	private JPanel orderListpanel = null;
 	
 	public OrderListPanel(AbstractTableModel orderListModel, AbstractTableModel orderInfoModel) {
 		orderListTable = new JTable(orderListModel);
@@ -43,7 +44,8 @@ public class OrderListPanel extends MyTablePanel{
 		this.setLayout(new BorderLayout());
 		
 		JPanel panel= new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
-		panel.add(orderListPanel());
+		orderListpanel = orderListPanel(); 
+		panel.add(orderListpanel);
 		
 		this.add(panel, "West");
 		
@@ -124,6 +126,13 @@ public class OrderListPanel extends MyTablePanel{
 		orderInfoTable.setModel(model);
 		DefaultTableRenderer(orderInfoTable);
 		setTableCell(orderInfoTable, 100, 2);
+	}
+	
+	public void setBorderName(String title) {
+		orderListpanel.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder(), 
+				title,
+                TitledBorder.LEFT, 
+                TitledBorder.TOP));
 	}
 
 	public JTable getOrderListTable() {

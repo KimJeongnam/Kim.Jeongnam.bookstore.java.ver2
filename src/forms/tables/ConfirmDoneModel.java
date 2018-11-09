@@ -6,17 +6,14 @@ import javax.swing.table.AbstractTableModel;
 
 import models.Order;
 
-public class ConfirmTableModel extends AbstractTableModel{
-	/**
-	 * 
-	 */
+public class ConfirmDoneModel extends AbstractTableModel{
 	private static final long serialVersionUID = 1L;
-	String[] columnNames = {"No.", "Check", "요청인", "요청 날짜", "요청 시간", "건수", "총 액"};
+	String[] columnNames = {"No.", "결제 승인  날짜", "승인 시간", "건수", "총 액"};
 	private ArrayList<Order> list;
 	
 	
-	public ConfirmTableModel() {
-		this.list = Order.confirmAsklist;
+	public ConfirmDoneModel() {
+		this.list = Order.buylist;
 	}
 	public int getRowCount() {
         return list.size();
@@ -31,18 +28,15 @@ public class ConfirmTableModel extends AbstractTableModel{
         
        switch(columnIndex) {
        case 0:
-    	   return rowIndex+1;
+    	   Integer row = rowIndex+1;
+    	   return row;
        case 1:
-    	   return data.isChecked();
-       case 2:
-    	   return data.getUser_id();
-       case 3:
     	   return data.getDate();
-       case 4:
+       case 2:
     	   return data.getTime();
-       case 5:
+       case 3:
     	   return Integer.parseInt(data.getCount());
-       case 6:
+       case 4:
     	   return data.getTotalPrice();
     	   default:
     		   return null;

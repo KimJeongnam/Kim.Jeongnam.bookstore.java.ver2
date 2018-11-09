@@ -8,33 +8,37 @@ import db.Oracledb;
 import db.command.Command;
 import models.Order;
 
-public class ConfirmAskList_Command implements Command{
+public class RefundList_Command implements Command{
 	private PreparedStatement pstmt;
 	private ResultSet rs;
+	
 	
 	@Override
 	public void execute() throws SQLException {
 		String sql = "SELECT o1.order_code\n" + 
+				"        , TO_CHAR(o1.confirm_date, 'YYYY-MM-DD') \"date\"\n" + 
+				"        , TO_CHAR(o1.confirm_date, 'HH24:MI:SS') \"time\"\n" + 
 				"        , o1.user_id\n" + 
-				"        , TO_CHAR(o1.order_date, 'YYYY-MM-DD') \"date\"\n" + 
-				"        , TO_CHAR(o1.order_date, 'HH24:MI:SS') \"time\"\n" + 
 				"        , (SELECT COUNT(*) \n" + 
 				"            FROM order_info o2\n" + 
 				"            WHERE o2.order_code = o1.order_code) count\n" + 
-				"        , TO_CHAR(o1.totalprice, 'L999,999,999') \"totalprice\"\n" + 
+				"        ,  TO_CHAR(o1.totalprice, 'L999,999,999') \"totalprice\"\n" + 
 				"        FROM orders o1 \n" + 
-				"        WHERE o1.payment_status = 0\n" + 
-				"        AND o1.refund_ask=0\n" + 
-				"        GROUP BY o1.order_code, o1.user_id, TO_CHAR(o1.order_date, 'YYYY-MM-DD'), TO_CHAR(o1.order_date, 'HH24:MI:SS'), user_id, TO_CHAR(o1.totalprice, 'L999,999,999')\n" + 
-				"        ORDER BY TO_CHAR(o1.order_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.order_date, 'HH24:MI:SS') ASC" + 
-				"        ";
+				"        WHERE o1.payment_status = 1\n" + 
+				"        AND o1.refund_ask=1\n" + 
+				"        GROUP BY o1.order_code\n" + 
+				"        , o1.user_id\n" + 
+				"        , TO_CHAR(o1.confirm_date, 'YYYY-MM-DD')\n" + 
+				"        , TO_CHAR(o1.confirm_date, 'HH24:MI:SS')\n" + 
+				"        , TO_CHAR(o1.totalprice, 'L999,999,999')\n" + 
+				"        ORDER BY TO_CHAR(o1.confirm_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.confirm_date, 'HH24:MI:SS') ASC";
 
 		pstmt = Oracledb.getInstance().getConnection().prepareStatement(sql);
 
-
 		rs = pstmt.executeQuery();
 		
-		Order.confirmAsklist.clear();
+		Order.refundlist.clear();
+		
 		
 		while(rs.next()) {
 			Order data = new Order();
@@ -46,9 +50,7 @@ public class ConfirmAskList_Command implements Command{
 			data.setCount(Integer.toString(rs.getInt("count")));
 			data.setTotalPrice(rs.getString("totalprice"));
 			
-			
-			
-			Order.confirmAsklist.add(data);
+			Order.refundlist.add(data);
 		}
 		
 		pstmt.close();

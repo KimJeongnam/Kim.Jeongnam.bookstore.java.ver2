@@ -6,17 +6,17 @@ import javax.swing.table.AbstractTableModel;
 
 import models.Order;
 
-public class ConfirmTableModel extends AbstractTableModel{
+public class RefundTableModel extends AbstractTableModel{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	String[] columnNames = {"No.", "Check", "요청인", "요청 날짜", "요청 시간", "건수", "총 액"};
+	String[] columnNames = {"No.", "Check", "요청인", "결제 승인 날짜", "승인 시간", "건수", "총 액"};
 	private ArrayList<Order> list;
 	
 	
-	public ConfirmTableModel() {
-		this.list = Order.confirmAsklist;
+	public RefundTableModel() {
+		this.list = Order.refundlist;
 	}
 	public int getRowCount() {
         return list.size();

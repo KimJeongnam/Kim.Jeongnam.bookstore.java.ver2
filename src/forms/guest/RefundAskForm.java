@@ -9,27 +9,27 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import forms.MainForm;
-import forms.panels.guest.BuyAskTablePanel;
-import service.Session;
+import forms.panels.guest.BuyListTablePanel;
 
-public class GuestBuyAskForm extends JFrame{
+public class RefundAskForm extends JFrame{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private BuyListTablePanel buyListpanel = null;
 	
-	public GuestBuyAskForm() {
-		this.setTitle("구매요청 목록");
-		
+	public RefundAskForm() {
 		this.setLayout(new BorderLayout());
 		
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
-		panel.add(new JLabel("구매 요청 목록"));
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20 , 20));
+		JLabel label = new JLabel("환불 요청");
+		panel.add(label);
+		
 		this.add(panel, "North");
 		
-		this.add(new BuyAskTablePanel());
+		buyListpanel = new BuyListTablePanel();
+		this.add(buyListpanel, "South");
 		
 		this.setVisible(true);
 		this.pack();
@@ -43,5 +43,8 @@ public class GuestBuyAskForm extends JFrame{
 			}
 		});
 	}
-
+	
+/*	public static void main(String[] args) {
+		new RefundAskForm();
+	}*/
 }

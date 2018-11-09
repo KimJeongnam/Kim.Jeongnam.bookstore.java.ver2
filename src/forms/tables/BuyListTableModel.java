@@ -28,7 +28,8 @@ public class BuyListTableModel extends AbstractTableModel{
         
        switch(columnIndex) {
        case 0:
-    	   return rowIndex+1;
+    	   Integer row = rowIndex+1;
+    	   return row;
        case 1:
     	   return data.isChecked();
        case 2:
@@ -55,6 +56,22 @@ public class BuyListTableModel extends AbstractTableModel{
     // number value is right aligned.
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        return getValueAt(0, columnIndex).getClass();
+        /*return getValueAt(0, columnIndex).getClass();*/
+    	switch(columnIndex) {
+    	case 0:
+    		return Integer.class;
+    	case 1:
+    		return Boolean.class;
+    	case 2:
+    		return String.class;
+    	case 3:
+    		return String.class;
+    	case 4:
+    		return Integer.class;
+    	case 5:
+    		return String.class;
+    		default:
+    			return String.class;
+    	}
     }
 }

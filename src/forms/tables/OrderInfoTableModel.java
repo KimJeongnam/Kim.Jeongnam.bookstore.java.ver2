@@ -8,6 +8,10 @@ import models.OrderInfo;
 
 public class OrderInfoTableModel extends AbstractTableModel{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String[] columnNames = {"책 이름", "저자", "가격", "희망 수량"};
 	private ArrayList<OrderInfo> list;
 	
