@@ -23,6 +23,12 @@ public class CartAddNowBuyPanel extends JPanel{
 	private static JLabel selectBook_code = new JLabel();	// 선택한 책의 코드
 	private static JLabel selectBook_name = new JLabel();	// 선택한 책의 제목
 	private static JTextField tfWishStock = new JTextField(5);	// 희망 수량
+	
+	public static void init() {
+		selectBook_code.setText("");
+		selectBook_name.setText("");
+		tfWishStock.setText("");
+	}
 
 	public CartAddNowBuyPanel() {
 		JLabel label = null;

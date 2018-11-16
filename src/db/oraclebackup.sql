@@ -231,13 +231,14 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('order_info delete Trigger 발생');
         
     UPDATE books 
-        SET stock = stock+:old.order_stock;
+        SET stock = stock+:old.order_stock
+        WHERE book_code = :old.book_code;
 END;
 /
 
 -- orders 컬럼 삭제시 orders컬럼 삭제 전에 발생하는 트리거 로서 자식 테이블을 모두 지운다.
 SET SERVEROUTPUT ON
-CREATE OR REPLACE TRIGGER trigger_delete_orders_before
+CREATE OR REPLACE TRIGGER trigger_delete_ordersbefore
     BEFORE DELETE
     ON orders
     FOR EACH ROW
@@ -249,6 +250,8 @@ BEGIN
     
 END;
 /
+
+SELECT * FROM ALL_TRIGGERS;
 
 delete from orders
     WHERE order_code = 'ORDER_20181108042614OGDZ';
@@ -358,6 +361,24 @@ SELECT o1.order_code
         , TO_CHAR(o1.confirm_date, 'YYYY-MM-DD')
         , TO_CHAR(o1.confirm_date, 'HH24:MI:SS')
         , user_id
+        , TO_CHAR(o1.totalprice, 'L999,999,999')
+        ORDER BY TO_CHAR(o1.confirm_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.confirm_date, 'HH24:MI:SS') ASC;
+        
+-- Host 구매완료목록
+-- 주문목록 주문 코드, 승인날짜, 총액, 내역 갯수 조회  
+SELECT o1.order_code
+        , TO_CHAR(o1.confirm_date, 'YYYY-MM-DD') "date"
+        , TO_CHAR(o1.confirm_date, 'HH24:MI:SS') "time"
+        , (SELECT COUNT(*) 
+            FROM order_info o2
+            WHERE o2.order_code = o1.order_code) count
+        ,  TO_CHAR(o1.totalprice, 'L999,999,999') "totalprice"
+        FROM orders o1 
+        WHERE o1.payment_status = 1
+        AND o1.refund_ask=0
+        GROUP BY o1.order_code
+        , TO_CHAR(o1.confirm_date, 'YYYY-MM-DD')
+        , TO_CHAR(o1.confirm_date, 'HH24:MI:SS')
         , TO_CHAR(o1.totalprice, 'L999,999,999')
         ORDER BY TO_CHAR(o1.confirm_date, 'YYYY-MM-DD') ASC, TO_CHAR(o1.confirm_date, 'HH24:MI:SS') ASC;
         

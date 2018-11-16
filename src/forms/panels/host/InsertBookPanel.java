@@ -109,17 +109,21 @@ public class InsertBookPanel extends JPanel{
 		return tfPanel;
 	}
 	
+	public void clearTF() {
+		label_bookCode.setText("");
+		tf_book_name.setText("");
+		tf_author.setText("");
+		tf_price.setText("");
+		tf_stock.setText("");
+	}
+	
 	private void clearButtonAction(JButton button) {
 		button.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				label_bookCode.setText("");
-				tf_book_name.setText("");
-				tf_author.setText("");
-				tf_price.setText("");
-				tf_stock.setText("");
+				clearTF();
 			}
 			
 		});

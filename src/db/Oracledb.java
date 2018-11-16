@@ -14,15 +14,16 @@ public class Oracledb {
 	
 	public Oracledb() {
 		try {
-			OracleDataSource ds = new OracleDataSource();
+			/*OracleDataSource ds = new OracleDataSource();*/
 			String driver = "oracle.jdbc.driver.OracleDriver";
 			String dbURL = "jdbc:oracle:thin:@localhost:1521:xe"; //:1521:xe
             String username = "scott";
             String password = "tiger";
             
             Class.forName(driver);
-            ds.setURL(dbURL);
-            con = ds.getConnection(username,password); 
+            /*ds.setURL(dbURL);*/
+            /*con = ds.getConnection(username,password); */
+            con = DriverManager.getConnection(dbURL, username, password);
             
 			stmt = con.createStatement();
 			System.out.println("Connection DB!");

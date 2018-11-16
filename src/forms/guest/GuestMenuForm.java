@@ -101,6 +101,7 @@ public class GuestMenuForm extends JFrame {
 	
 	public void close() {
 		this.dispose();
+		CartAddNowBuyPanel.init();
 		if(GuestCartForm.getInstance() != null)
 			GuestCartForm.getInstance().close();
 		instance = null;

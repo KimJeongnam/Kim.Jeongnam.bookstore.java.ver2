@@ -64,8 +64,7 @@ public class HostMenuButtonLitener implements ActionListener{
 			HostMenuForm.frames.add(new OrderMenuForm());
 			break;
 		}
-		
-		
+		InsertBookPanel.getInstance().clearTF();
 	}
 	
 }
